@@ -1,63 +1,52 @@
-import React from 'react';
-import Home from './Home';
-import Mail from './Mail';
-import Lock from './Lock';
-import User from './User';
-import Heart from './Heart';
-import Plus from './Plus';
-import Search from './Search';
-import Location from './Location';
-import Call from './Call';
+import React, {Suspense} from 'react';
 import theme from '../../theme';
-import Camera from './Camera';
-import Edit from './Edit';
-import ArrowLeft from './ArrowLeft';
-import ThreeDotsCircle from './ThreeDotsCircle';
-import ThreeDotsHorizontal from './ThreeDotsHorizontal';
-import Comment from './Comment';
-import Share from './Share';
-import Send from './Send';
-import Delete from './Delete';
-import Logout from './logout';
-import Image from './Image';
-import Video from './Video';
 import {scale} from '../../utils';
+import {SvgProps} from 'react-native-svg';
+import {lazy} from 'react';
 
-const icons: any = {
-  home: Home,
-  mail: Mail,
-  lock: Lock,
-  user: User,
-  heart: Heart,
-  plus: Plus,
-  search: Search,
-  location: Location,
-  call: Call,
-  camera: Camera,
-  edit: Edit,
-  arrowLeft: ArrowLeft,
-  threeDotsCircle: ThreeDotsCircle,
-  threeDotsHorizontal: ThreeDotsHorizontal,
-  comment: Comment,
-  share: Share,
-  send: Send,
-  delete: Delete,
-  logout: Logout,
-  image: Image,
-  video: Video,
-};
+const icons = {
+  home: lazy(() => import('./Home')),
+  mail: lazy(() => import('./Mail')),
+  lock: lazy(() => import('./Lock')),
+  user: lazy(() => import('./User')),
+  heart: lazy(() => import('./Heart')),
+  plus: lazy(() => import('./Plus')),
+  search: lazy(() => import('./Search')),
+  location: lazy(() => import('./Location')),
+  call: lazy(() => import('./Call')),
+  camera: lazy(() => import('./Camera')),
+  edit: lazy(() => import('./Edit')),
+  arrowLeft: lazy(() => import('./ArrowLeft')),
+  threeDotsCircle: lazy(() => import('./ThreeDotsCircle')),
+  threeDotsHorizontal: lazy(() => import('./ThreeDotsHorizontal')),
+  comment: lazy(() => import('./Comment')),
+  share: lazy(() => import('./Share')),
+  send: lazy(() => import('./Send')),
+  delete: lazy(() => import('./Delete')),
+  logout: lazy(() => import('./Logout')),
+  image: lazy(() => import('./Image')),
+  video: lazy(() => import('./Video')),
+} as const;
 
-const Icon = ({name, ...props}: any) => {
+type IconName = keyof typeof icons;
+
+interface IconProps extends SvgProps {
+  name: IconName;
+  size?: number;
+}
+
+const Icon: React.FC<IconProps> = ({name, ...props}) => {
   const IconComponent = icons[name];
   return (
-    <IconComponent
-      height={props.size || scale(24)}
-      width={props.size || scale(24)}
-      strokeWidth={props.strokeWidth || scale(1.9)}
-      color={theme.palette.textLight}
-      {...props}
-    />
+    <Suspense fallback={null}>
+      <IconComponent
+        height={props.size || scale(24)}
+        width={props.size || scale(24)}
+        strokeWidth={props.strokeWidth || scale(1.9)}
+        color={theme.palette.textLight}
+        {...props}
+      />
+    </Suspense>
   );
 };
-
-export default Icon;
+export default React.memo(Icon);

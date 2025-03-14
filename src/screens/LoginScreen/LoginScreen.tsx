@@ -1,14 +1,14 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
-import Home from '../../assets/icons/Home';
+import Icon from '../../assets/icons';
 
 const LoginScreen = () => {
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <Text>LoginScreen</Text>
-      <Home strokeWidth={2} color={theme.palette.rose} />
+      <Icon name="home" color="red" />
     </ScreenWrapper>
   );
 };
