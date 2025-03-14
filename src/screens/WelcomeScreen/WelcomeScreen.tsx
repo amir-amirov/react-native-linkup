@@ -3,7 +3,7 @@ import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import {scale} from '../../utils';
-import Button from '../../components/Button/Button';
+import Button from '../../components/Buttons/Button/Button';
 import {styles} from './styles';
 import {useNavigation} from '@react-navigation/native';
 
@@ -36,7 +36,7 @@ const WelcomeScreen = () => {
           <Button
             title="Getting Started"
             buttonStyle={styles.btn}
-            onPress={() => {}}
+            onPress={() => navigation.navigate('Signup')}
           />
 
           <View style={styles.bottomTextContainer}>
