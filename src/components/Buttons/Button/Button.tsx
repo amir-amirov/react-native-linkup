@@ -7,12 +7,12 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import theme from '../../theme';
-import {scale} from '../../utils';
-import Loading from '../Loading/Loading';
+import theme from '../../../theme';
+import {scale} from '../../../utils';
+import Loading from '../../Loading/Loading';
 
 interface Props {
-  buttonStyle: any;
+  buttonStyle?: any;
   textStyle?: any;
   title: string;
   onPress: () => void;
