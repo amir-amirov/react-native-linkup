@@ -5,8 +5,10 @@ import theme from '../../theme';
 import {scale} from '../../utils';
 import Button from '../../components/Button/Button';
 import {styles} from './styles';
+import {useNavigation} from '@react-navigation/native';
 
 const WelcomeScreen = () => {
+  const navigation = useNavigation<any>();
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <StatusBar
@@ -40,7 +42,9 @@ const WelcomeScreen = () => {
           <View style={styles.bottomTextContainer}>
             <Text style={styles.loginText}>Already have an account!</Text>
 
-            <Pressable>
+            <Pressable
+              onPress={() => navigation.navigate('Login')}
+              hitSlop={scale(10)}>
               <Text style={[styles.loginText, {color: theme.palette.primary}]}>
                 Login
               </Text>

@@ -9,8 +9,16 @@ const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{animation: 'slide_from_right'}}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{animation: 'slide_from_right'}}
+      />
     </Stack.Navigator>
   );
 };
