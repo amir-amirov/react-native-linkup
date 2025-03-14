@@ -1,4 +1,11 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import theme from '../../theme';
 import {scale} from '../../utils';
@@ -29,11 +36,12 @@ const Button: React.FC<Props> = ({
     );
   }
   return (
-    <Pressable
+    <TouchableHighlight
+      underlayColor={theme.palette.primaryDark}
       onPress={onPress}
       style={[styles.button, buttonStyle, hasShadow && styles.shadowStyle]}>
       <Text style={[styles.text, textStyle]}>{title}</Text>
-    </Pressable>
+    </TouchableHighlight>
   );
 };
 
@@ -46,17 +54,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: theme.spacing.radius.xl,
+    overflow: 'hidden',
   },
   text: {
     fontSize: 22,
     color: theme.palette.white,
     fontWeight: '700',
   },
+  // not working with TouchableHighlight
   shadowStyle: {
     shadowColor: theme.palette.dark,
     shadowOffset: {width: 0, height: 10},
     shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 4,
+    // elevation: 4,
   },
 });
