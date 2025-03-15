@@ -7,7 +7,7 @@ import SignUpScreen from '../screens/SignUpScreen/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
-const AppNavigator = () => {
+const AuthNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
@@ -29,6 +29,6 @@ const AppNavigator = () => {
   );
 };
 
-export default AppNavigator;
+export default AuthNavigator;
 
 const styles = StyleSheet.create({});
