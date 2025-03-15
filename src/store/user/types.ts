@@ -2,6 +2,7 @@ import {CaseReducer, PayloadAction} from '@reduxjs/toolkit';
 
 export type UserState = {
   isLoading: boolean;
+  isAuth: boolean;
   user: User | null;
 };
 

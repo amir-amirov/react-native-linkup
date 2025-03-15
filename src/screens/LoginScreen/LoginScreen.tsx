@@ -3,11 +3,10 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import BackButton from '../../components/Buttons/BackButton/BackButton';
@@ -16,8 +15,11 @@ import {scale} from '../../utils';
 import Input from '../../components/Input/Input';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Buttons/Button/Button';
+import baseService from '../../services/axios/baseService';
 
 const LoginScreen = () => {
+  const [isLoading, setLoading] = useState(false);
+
   const navigation = useNavigation<any>();
 
   const emailRef = useRef('');
@@ -27,6 +29,23 @@ const LoginScreen = () => {
     if (!emailRef.current && !passwordRef.current) {
       Alert.alert('Login', 'Please fill all the fields!');
       return;
+    } else {
+      handleLogin();
+    }
+  };
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const response = await baseService.post('/users/signin', {
+        email: emailRef.current.toLowerCase(),
+        password: passwordRef.current,
+      });
+      console.log('Login response: ', response.data);
+    } catch (err) {
+      console.log('Error: ', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,10 +71,12 @@ const LoginScreen = () => {
             icon={
               <Icon name="mail" size={scale(26)} strokeWidth={scale(1.6)} />
             }
+            autoCapitalize={'none'}
             placeholder={'Enter your email'}
             onChangeText={(value: string) => {
               emailRef.current = value;
             }}
+            editable={!isLoading}
           />
           <Input
             icon={
@@ -65,13 +86,18 @@ const LoginScreen = () => {
             onChangeText={(value: string) => {
               passwordRef.current = value;
             }}
+            editable={!isLoading}
             secureTextEntry
           />
           <TouchableOpacity activeOpacity={0.5}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
 
-          <Button title="Login" loading={false} onPress={() => onSubmit()} />
+          <Button
+            title="Login"
+            loading={isLoading}
+            onPress={() => onSubmit()}
+          />
         </View>
 
         <View style={styles.footer}>
