@@ -1,21 +1,41 @@
-// import { StyleSheet, Text, View } from 'react-native'
-// import React from 'react'
-// import { scale } from '../../utils'
-// import theme from '../../theme'
+import {StyleSheet} from 'react-native';
+import React from 'react';
+import {scale} from '../../utils';
+import theme from '../../theme';
+import FastImage, {ImageStyle} from 'react-native-fast-image';
+import {getUserImageSrc} from '../../utils/getUserImageSrc';
 
-// const Avatar = ({
-//     uri,
-//     size=scale(27),
-//     rounded=theme.spacing.radius.md,
-//     style={}
-// }) => {
-//   return (
-//     <View>
-//       <Text>Avatar</Text>
-//     </View>
-//   )
-// }
+interface Props {
+  uri: string;
+  size?: number;
+  rounded?: number;
+  style?: ImageStyle;
+}
 
-// export default Avatar
+const Avatar: React.FC<Props> = ({
+  uri,
+  size = scale(27),
+  rounded = theme.spacing.radius.md,
+  style = {},
+}) => {
+  return (
+    <FastImage
+      source={getUserImageSrc(uri)}
+      style={[
+        styles.avatar,
+        {height: size, width: size, borderRadius: rounded},
+        style,
+      ]}
+    />
+  );
+};
 
-// const styles = StyleSheet.create({})
+export default Avatar;
+
+const styles = StyleSheet.create({
+  avatar: {
+    borderCurve: 'continuous',
+    borderColor: theme.palette.darkLight,
+    borderWidth: 1,
+  },
+});

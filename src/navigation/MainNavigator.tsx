@@ -31,7 +31,7 @@ const MainNavigator = () => {
       <Stack.Screen
         name="NewPost"
         component={NewPostScreen}
-        options={{animation: 'slide_from_right'}}
+        options={{presentation: 'modal'}}
       />
     </Stack.Navigator>
   );
