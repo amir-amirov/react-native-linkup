@@ -2,7 +2,7 @@ import * as types from './types';
 import {createSlice} from '@reduxjs/toolkit';
 
 import * as reducers from './reducers';
-// import { extraReducers } from "./thunk";
+import {extraReducers} from './thunks';
 
 const initialState: types.UserState = {
   isLoading: false,
@@ -14,7 +14,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers,
-  // extraReducers,
+  extraReducers,
 });
 
 export const userActions = userSlice.actions;

@@ -18,7 +18,7 @@ const baseService = axios.create({
   timeout: 15000,
 });
 
-export const saveTokens = (access_token: string) => {
+export const saveTokens = (access_token: string, refresh_token: string) => {
   //   store.dispatch(userActions.setToken(access_token));
 };
 
@@ -28,7 +28,7 @@ export const setAuthHeader = (access_token: string) => {
   ] = `Bearer ${access_token}`;
 };
 
-export const clearToken = () => {
+export const clearTokens = () => {
   baseService.defaults.headers.common[authAccessTokenHeaderName] = '';
   //   store.dispatch(authActions.removeToken());
 };
@@ -59,12 +59,13 @@ baseService.interceptors.response.use(
     return response;
   },
   async error => {
-    console.log('Error: ', error.message);
+    console.log('Error: ', error.response);
+    console.log('Error 2: ', error.message);
     console.log('Error message: ', error.response.data.message);
 
     if (error.response?.status === 401) {
       console.log('Error logout');
-      clearToken();
+      clearTokens();
       handleLogout();
     }
     return Promise.reject(error);

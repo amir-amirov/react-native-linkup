@@ -5,8 +5,11 @@ import {scale} from '../../utils';
 import theme from '../../theme';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import {useNavigation} from '@react-navigation/native';
+import {useUser} from '../../store/user';
+import {clearTokens} from '../../services/axios/baseService';
 
 const ProfileScreen = () => {
+  const {setIsAuth, removeUserDetails} = useUser();
   const navigation = useNavigation<any>();
   const handleLogout = () => {
     Alert.alert('Logout Confirmation', 'Are you sure you want to log out?', [
@@ -14,9 +17,9 @@ const ProfileScreen = () => {
         text: 'Yes',
         onPress: () => {
           console.log('Logging out...');
-          navigation.navigate('Auth', {
-            screen: 'Welcome',
-          });
+          removeUserDetails();
+          clearTokens();
+          setIsAuth(false);
         },
       },
       {

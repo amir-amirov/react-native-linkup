@@ -11,7 +11,9 @@ const Input = ({containerStyles, icon, inputRef, ...props}: any) => {
         style={{flex: 1}}
         placeholderTextColor={theme.palette.textLight}
         ref={inputRef && inputRef}
-        keyboardType="email-address"
+        autoCapitalize={'none'}
+        selectionColor={theme.palette.black}
+        cursorColor={theme.palette.black}
         {...props}
       />
     </View>
