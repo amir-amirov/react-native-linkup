@@ -16,9 +16,10 @@ import Input from '../../components/Input/Input';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Buttons/Button/Button';
 import baseService from '../../services/axios/baseService';
+import {useUser} from '../../store/user';
 
 const LoginScreen = () => {
-  const [isLoading, setLoading] = useState(false);
+  const {isLoading, setIsAuth, loginUser, setUser} = useUser();
 
   const navigation = useNavigation<any>();
 
@@ -26,7 +27,7 @@ const LoginScreen = () => {
   const passwordRef = useRef('');
 
   const onSubmit = async () => {
-    if (!emailRef.current && !passwordRef.current) {
+    if (!emailRef.current || !passwordRef.current) {
       Alert.alert('Login', 'Please fill all the fields!');
       return;
     } else {
@@ -35,19 +36,53 @@ const LoginScreen = () => {
   };
 
   const handleLogin = async () => {
-    setLoading(true);
     try {
-      const response = await baseService.post('/users/signin', {
+      const response = await loginUser({
         email: emailRef.current.toLowerCase(),
         password: passwordRef.current,
       });
-      console.log('Login response: ', response.data);
-    } catch (err) {
-      console.log('Error: ', err);
-    } finally {
-      setLoading(false);
+
+      if (!!response) {
+        setUser(response);
+        setIsAuth(true);
+      }
+    } catch (err: any) {
+      console.log('Type of error: ', typeof err);
+      Alert.alert(
+        'Sorry',
+        err.length > 0 && typeof err !== 'string' ? err[0] : err,
+      );
+      console.log('Login error: ', err);
     }
   };
+  // const login = async (values: FieldValues) => {
+  //   console.log('values', values);
+  //   const { passwordLogin, phone } = values;
+  //   const formattedNumber = phone.replace(/\D/g, '');
+  //   try {
+  //     const res = await loginUser({
+  //       phone: formattedNumber,
+  //       password: passwordLogin,
+  //     });
+
+  //     if (res.email_verified_at) {
+  //       await getCourses(1);
+  //       await getSurahs();
+  //       await getJuzs();
+  //       setAuthorize(true);
+  //     } else {
+  //       await resendValidation(res.email);
+  //       navigation.navigate('CodeConfermation');
+  //     }
+  //   } catch (error: any) {
+  //     console.log('Login error', error);
+  //     Toast.show({
+  //       type: 'info',
+  //       position: 'top',
+  //       text1: error,
+  //     });
+  //   }
+  // };
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
@@ -71,7 +106,6 @@ const LoginScreen = () => {
             icon={
               <Icon name="mail" size={scale(26)} strokeWidth={scale(1.6)} />
             }
-            autoCapitalize={'none'}
             placeholder={'Enter your email'}
             onChangeText={(value: string) => {
               emailRef.current = value;
@@ -89,7 +123,7 @@ const LoginScreen = () => {
             editable={!isLoading}
             secureTextEntry
           />
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity disabled={isLoading} activeOpacity={0.5}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
 
@@ -103,6 +137,7 @@ const LoginScreen = () => {
         <View style={styles.footer}>
           <Text style={styles.footerText}>Don't have an account?</Text>
           <TouchableOpacity
+            disabled={isLoading}
             activeOpacity={0.5}
             onPress={() => navigation.navigate('Signup')}>
             <Text

@@ -12,5 +12,29 @@ export type User = {
   name: string;
   image: string | null;
 };
+
+export type RegisterRequest = {
+  email: string;
+  name: string;
+  password: string;
+};
+
+export type RegisterResponse = {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+};
+
 // Contracts
 export type BaseContract<T> = CaseReducer<UserState, PayloadAction<T>>;

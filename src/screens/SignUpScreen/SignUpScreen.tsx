@@ -15,8 +15,10 @@ import {scale} from '../../utils';
 import Input from '../../components/Input/Input';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Buttons/Button/Button';
+import {useUser} from '../../store/user';
 
 const SignUpScreen = () => {
+  const {isLoading, setIsAuth, registerUser, setUser} = useUser();
   const navigation = useNavigation<any>();
 
   const nameRef = useRef('');
@@ -24,9 +26,32 @@ const SignUpScreen = () => {
   const passwordRef = useRef('');
 
   const onSubmit = async () => {
-    if (!emailRef.current && !passwordRef.current) {
-      Alert.alert('Login', 'Please fill all the fields!');
+    if (!emailRef.current || !passwordRef.current || !nameRef.current) {
+      Alert.alert('Registration', 'Please fill all the fields!');
       return;
+    } else {
+      handleRegister();
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      const response = await registerUser({
+        name: nameRef.current,
+        email: emailRef.current.toLowerCase(),
+        password: passwordRef.current,
+      });
+
+      if (!!response) {
+        setUser(response);
+        setIsAuth(true);
+      }
+    } catch (err: any) {
+      Alert.alert(
+        'Sorry',
+        err.length > 0 && typeof err !== 'string' ? err[0] : err,
+      );
+      console.log('Signin error: ', err);
     }
   };
 
@@ -58,6 +83,7 @@ const SignUpScreen = () => {
             onChangeText={(value: string) => {
               nameRef.current = value;
             }}
+            editable={!isLoading}
           />
           <Input
             icon={
@@ -67,6 +93,7 @@ const SignUpScreen = () => {
             onChangeText={(value: string) => {
               emailRef.current = value;
             }}
+            editable={!isLoading}
           />
           <Input
             icon={
@@ -76,15 +103,32 @@ const SignUpScreen = () => {
             onChangeText={(value: string) => {
               passwordRef.current = value;
             }}
+            editable={!isLoading}
+            secureTextEntry
+          />
+          <Input
+            icon={
+              <Icon name="lock" size={scale(26)} strokeWidth={scale(1.6)} />
+            }
+            placeholder={'Confirm your password'}
+            onChangeText={(value: string) => {
+              passwordRef.current = value;
+            }}
+            editable={!isLoading}
             secureTextEntry
           />
 
-          <Button title="Sign Up" loading={false} onPress={() => onSubmit()} />
+          <Button
+            title="Sign Up"
+            loading={isLoading}
+            onPress={() => onSubmit()}
+          />
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>Already have an account?</Text>
           <TouchableOpacity
+            disabled={isLoading}
             activeOpacity={0.5}
             onPress={() => navigation.navigate('Login')}>
             <Text
