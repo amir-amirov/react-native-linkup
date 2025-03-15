@@ -4,7 +4,7 @@ import MainNavigator from './MainNavigator';
 import AuthNavigator from './AuthNavigator';
 
 const AppNavigator = () => {
-  const isAuth = true;
+  const isAuth = false;
   return <>{isAuth ? <MainNavigator /> : <AuthNavigator />}</>;
 };
 
