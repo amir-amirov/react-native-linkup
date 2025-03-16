@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, TouchableHighlight, View} from 'react-native';
+import {Alert, StyleSheet, TouchableHighlight, View, Text} from 'react-native';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -72,6 +72,15 @@ const EditProfile = () => {
                 <Icon name="camera" strokeWidth={2.5} size={scale(20)} />
               </TouchableHighlight>
             </View>
+
+            <Text
+              style={{
+                fontSize: 12,
+                fontWeight: '500',
+                color: theme.palette.textLight,
+              }}>
+              Please fill your profile details
+            </Text>
 
             <Input
               onChangeText={(value: string) => {
