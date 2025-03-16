@@ -90,6 +90,7 @@ const SignUpScreen = () => {
             onChangeText={(value: string) => {
               nameRef.current = value;
             }}
+            autoCapitalize="words"
             editable={!isLoading}
           />
           <Input

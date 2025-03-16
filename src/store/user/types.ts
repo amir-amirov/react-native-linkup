@@ -11,6 +11,9 @@ export type User = {
   id: number;
   name: string;
   image: string | null;
+  phoneNumber: string | null;
+  location: string | null;
+  bio: string | null;
 };
 
 export type RegisterRequest = {
@@ -34,6 +37,19 @@ export type LoginResponse = {
   user: User;
   accessToken: string;
   refreshToken: string;
+};
+
+export type UpdateProfileRequest = {
+  id: number;
+  name: string;
+  image: string;
+  phoneNumber: string;
+  location: string;
+  bio: string;
+};
+
+export type UpdateProfileResponse = {
+  user: User;
 };
 
 // Contracts

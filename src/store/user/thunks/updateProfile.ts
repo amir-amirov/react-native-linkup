@@ -1,16 +1,16 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {LoginRequest, LoginResponse, User} from '../types';
+import {UpdateProfileRequest, UpdateProfileResponse, User} from '../types';
 import baseService from '../../../services/axios/baseService';
 
-export const loginUser = createAsyncThunk<
+export const updateProfile = createAsyncThunk<
   User,
-  LoginRequest,
+  Partial<UpdateProfileRequest>,
   {rejectValue: string}
->('auth/login', async (loginData, {rejectWithValue}) => {
+>('auth/updateUser', async (updateData, {rejectWithValue}) => {
   try {
-    const response = await baseService.post<LoginResponse>(
-      '/users/signin',
-      loginData,
+    const response = await baseService.put<UpdateProfileResponse>(
+      '/users/update-profile',
+      updateData,
     );
     const {user} = response.data;
 
@@ -19,7 +19,6 @@ export const loginUser = createAsyncThunk<
     if (error.response && error.response.data) {
       return rejectWithValue(error.response.data.message);
     }
-    console.log('Error: ', error);
     return rejectWithValue('An unknown error occurred.');
   }
 });

@@ -6,7 +6,7 @@ import FastImage, {ImageStyle} from 'react-native-fast-image';
 import {getUserImageSrc} from '../../utils/getUserImageSrc';
 
 interface Props {
-  uri: string;
+  uri: string | null;
   size?: number;
   rounded?: number;
   style?: ImageStyle;

@@ -50,14 +50,12 @@ baseService.interceptors.response.use(
   async response => {
     console.log('Response', response);
     console.log('Response Status:', response.status);
-    console.log('Response Message:', response.data.message);
 
     if (
       response.data &&
       response.data[accessToken] &&
       response.data[refreshToken]
     ) {
-      console.log('Hi');
       await saveTokens(response.data[accessToken], response.data[refreshToken]);
       setAuthHeader(response.data[accessToken]);
     }

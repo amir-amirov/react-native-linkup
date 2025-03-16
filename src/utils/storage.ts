@@ -24,7 +24,6 @@ export const getJWT = async () => {
     const credentials = await Keychain.getGenericPassword();
     if (credentials) {
       const parsedData = JSON.parse(credentials.password);
-      console.log('Retrieved data:', parsedData);
       return parsedData;
     } else {
       console.log('No data found in the keychain.');
