@@ -2,7 +2,13 @@ import {useAppDispatch, useAppSelector as useSelector} from '../index';
 import {userActions} from './slice';
 import {loginUser} from './thunks/loginUser';
 import {registerUser} from './thunks/registerUser';
-import {LoginRequest, RegisterRequest, User} from './types';
+import {updateProfile} from './thunks/updateProfile';
+import {
+  LoginRequest,
+  RegisterRequest,
+  UpdateProfileRequest,
+  User,
+} from './types';
 
 export const useUser = () => {
   const dispatch = useAppDispatch();
@@ -26,5 +32,7 @@ export const useUser = () => {
       dispatch(registerUser(registerData)).unwrap(),
     loginUser: async (loginData: LoginRequest) =>
       dispatch(loginUser(loginData)).unwrap(),
+    updateProfile: async (updateData: Partial<UpdateProfileRequest>) =>
+      dispatch(updateProfile(updateData)).unwrap(),
   };
 };

@@ -27,7 +27,7 @@ const ProfileHeader: React.FC<Props> = ({handleLogout}) => {
 export default ProfileHeader;
 
 const styles = StyleSheet.create({
-  container: {justifyContent: 'center'},
+  container: {justifyContent: 'center', marginBottom: scale(30)},
   logoutButton: {
     position: 'absolute',
     right: 0,

@@ -1,20 +1,15 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import Icon from '../../components/Icon/Icon';
 import {scale} from '../../utils';
 import theme from '../../theme';
 import {useNavigation} from '@react-navigation/native';
 import Avatar from '../../components/Avatar/Avatar';
-import {getJWT} from '../../utils/storage';
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
 
-  useEffect(() => {
-    const JWT = getJWT();
-    console.log('JWT: ', JWT);
-  }, []);
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <View style={styles.container}>

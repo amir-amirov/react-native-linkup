@@ -5,6 +5,7 @@ import HomeScreen from '../screens/Home/HomeScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 import NotificationScreen from '../screens/Notifications/NotificationScreen';
 import NewPostScreen from '../screens/NewPost/NewPostScreen';
+import EditProfile from '../screens/EditProfile/EditProfile';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -21,6 +22,11 @@ const MainNavigator = () => {
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
+        options={{animation: 'slide_from_right'}}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
         options={{animation: 'slide_from_right'}}
       />
       <Stack.Screen
