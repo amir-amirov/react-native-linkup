@@ -19,6 +19,7 @@ export const loginUser = createAsyncThunk<
     if (error.response && error.response.data) {
       return rejectWithValue(error.response.data.message);
     }
+    console.log('Error: ', error);
     return rejectWithValue('Invalid credentials.');
   }
 });
