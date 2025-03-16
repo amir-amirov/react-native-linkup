@@ -16,10 +16,13 @@ import Input from '../../components/Input/Input';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Buttons/Button/Button';
 import {useUser} from '../../store/user';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const SignUpScreen = () => {
   const {isLoading, setIsAuth, registerUser, setUser} = useUser();
+
   const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
 
   const nameRef = useRef('');
   const emailRef = useRef('');
@@ -61,7 +64,11 @@ const SignUpScreen = () => {
         backgroundColor={theme.palette.white}
         barStyle={'dark-content'}
       />
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {paddingTop: insets.top > 0 ? scale(10) : scale(20)},
+        ]}>
         <BackButton onPress={() => navigation.navigate('Welcome')} />
 
         {/* Welcome */}

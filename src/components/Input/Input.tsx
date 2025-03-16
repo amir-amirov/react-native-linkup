@@ -8,7 +8,7 @@ const Input = ({containerStyles, icon, inputRef, ...props}: any) => {
     <View style={[styles.container, containerStyles && containerStyles]}>
       {icon && icon}
       <TextInput
-        style={{flex: 1}}
+        style={{flex: 1, color: theme.palette.black}}
         placeholderTextColor={theme.palette.textLight}
         ref={inputRef && inputRef}
         autoCapitalize={'none'}

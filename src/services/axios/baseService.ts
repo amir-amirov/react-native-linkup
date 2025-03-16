@@ -2,6 +2,7 @@ import axios from 'axios';
 import {store} from '../../store/index';
 import {userActions} from '../../store/user/slice';
 import Config from 'react-native-config';
+import {deleteJWT, storeJWT} from '../../utils/storage';
 
 export const accessToken = 'accessToken';
 export const refreshToken = 'refreshToken';
@@ -18,8 +19,12 @@ const baseService = axios.create({
   timeout: 15000,
 });
 
-export const saveTokens = (access_token: string, refresh_token: string) => {
+export const saveTokens = async (
+  access_token: string,
+  refresh_token: string,
+) => {
   //   store.dispatch(userActions.setToken(access_token));
+  await storeJWT(access_token, refresh_token);
 };
 
 export const setAuthHeader = (access_token: string) => {
@@ -28,34 +33,34 @@ export const setAuthHeader = (access_token: string) => {
   ] = `Bearer ${access_token}`;
 };
 
-export const clearTokens = () => {
+export const clearTokens = async () => {
   baseService.defaults.headers.common[authAccessTokenHeaderName] = '';
-  //   store.dispatch(authActions.removeToken());
+  await deleteJWT();
 };
 
-export const handleLogout = () => {
+export const handleLogout = async () => {
   console.log('Logging out...');
 
+  await clearTokens();
   store.dispatch(userActions.removeUserDetails());
   store.dispatch(userActions.setIsAuth(false));
-
-  // Clear the Authorization header
-  delete baseService.defaults.headers.common['Authorization'];
-
-  // Optionally, redirect the user (if using React Router)
-  //   const navigate = useNavigate();
 };
 
 baseService.interceptors.response.use(
-  response => {
+  async response => {
     console.log('Response', response);
     console.log('Response Status:', response.status);
     console.log('Response Message:', response.data.message);
 
-    // if (response.data.data && response.data.data[accessToken]) {
-    //   saveTokens(response.data.data[accessToken]);
-    //   setAuthHeader(response.data.data[accessToken]);
-    // }
+    if (
+      response.data &&
+      response.data[accessToken] &&
+      response.data[refreshToken]
+    ) {
+      console.log('Hi');
+      await saveTokens(response.data[accessToken], response.data[refreshToken]);
+      setAuthHeader(response.data[accessToken]);
+    }
     return response;
   },
   async error => {

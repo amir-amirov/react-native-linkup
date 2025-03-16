@@ -3,10 +3,11 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import BackButton from '../../components/Buttons/BackButton/BackButton';
@@ -15,13 +16,17 @@ import {scale} from '../../utils';
 import Input from '../../components/Input/Input';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Buttons/Button/Button';
-import baseService from '../../services/axios/baseService';
 import {useUser} from '../../store/user';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const LoginScreen = () => {
   const {isLoading, setIsAuth, loginUser, setUser} = useUser();
 
   const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
+
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   const emailRef = useRef('');
   const passwordRef = useRef('');
@@ -90,7 +95,11 @@ const LoginScreen = () => {
         backgroundColor={theme.palette.white}
         barStyle={'dark-content'}
       />
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {paddingTop: insets.top > 0 ? scale(10) : scale(20)},
+        ]}>
         <BackButton onPress={() => navigation.navigate('Welcome')} />
 
         {/* Welcome */}
@@ -103,6 +112,7 @@ const LoginScreen = () => {
         <View style={styles.form}>
           <Text style={styles.inputLabel}>Please login to continue</Text>
           <Input
+            ref={emailInputRef}
             icon={
               <Icon name="mail" size={scale(26)} strokeWidth={scale(1.6)} />
             }
@@ -110,9 +120,15 @@ const LoginScreen = () => {
             onChangeText={(value: string) => {
               emailRef.current = value;
             }}
+            autoCorrect={false}
+            dataDetectorTypes="none"
+            returnKeyType="next"
+            blurOnSubmit={false}
+            onSubmitEditing={() => passwordInputRef.current?.focus()}
             editable={!isLoading}
           />
           <Input
+            ref={passwordInputRef}
             icon={
               <Icon name="lock" size={scale(26)} strokeWidth={scale(1.6)} />
             }
@@ -120,6 +136,8 @@ const LoginScreen = () => {
             onChangeText={(value: string) => {
               passwordRef.current = value;
             }}
+            returnKeyType="done"
+            onSubmitEditing={onSubmit}
             editable={!isLoading}
             secureTextEntry
           />
