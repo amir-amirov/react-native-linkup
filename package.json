@@ -1,5 +1,5 @@
 {
-  "name": "LinkUp",
+  "name": "linkup",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-firebase/app": "^21.12.0",
+    "@react-native-firebase/storage": "^21.12.0",
     "@react-navigation/native": "^7.0.15",
     "@react-navigation/native-stack": "^7.2.1",
     "@reduxjs/toolkit": "^2.6.1",
