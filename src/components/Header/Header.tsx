@@ -4,6 +4,10 @@ import {scale} from '../../utils';
 import BackButton from '../Buttons/BackButton/BackButton';
 import {useNavigation} from '@react-navigation/native';
 import theme from '../../theme';
+import {
+  SafeAreaInsetsContext,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 interface Props {
   title: string;
@@ -15,9 +19,14 @@ const Header: React.FC<Props> = ({
   showBackButton = false,
   mb = scale(10),
 }) => {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
   return (
-    <View style={[styles.container, {marginBottom: mb, marginTop: scale(10)}]}>
+    <View
+      style={[
+        styles.container,
+        {marginBottom: mb, marginTop: insets.top > 0 ? 0 : scale(10)},
+      ]}>
       {showBackButton && (
         <View style={styles.showBackButton}>
           <BackButton onPress={() => navigation.goBack()} />

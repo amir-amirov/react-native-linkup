@@ -9,25 +9,47 @@ import {useUser} from '../../store/user';
 import {useNavigation} from '@react-navigation/native';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Buttons/Button/Button';
-import {useRef} from 'react';
+import {useRef, useState} from 'react';
+import {openGallery} from '../../utils/openGallery';
+import {uploadImageToFirebase} from '../../utils/uploadImageToFirebase';
+import {Asset} from 'react-native-image-picker';
 
 const EditProfile = () => {
   const {user, isLoading, setUser, updateProfile} = useUser();
   const navigation = useNavigation();
+
+  const [isLoadingToStorage, setLoadingToStorage] = useState(false);
 
   const nameRef = useRef('');
   const phoneRef = useRef('');
   const locationRef = useRef('');
   const bioRef = useRef('');
 
+  const [pickedImage, setPickedImage] = useState<Asset | undefined>();
+
+  const pickAvatar = async () => {
+    const image = await openGallery(true);
+    console.log('I picked', image);
+    if (image != null) {
+      setPickedImage(image);
+    }
+  };
+
   const handleUpdate = async () => {
     try {
+      setLoadingToStorage(true);
+      let imageUrl;
+      if (pickedImage) {
+        imageUrl = await uploadImageToFirebase(pickedImage);
+      }
+
       console.log('I am sending: ', {
         id: user?.id,
         name: nameRef.current,
         phoneNumber: phoneRef.current,
         location: locationRef.current,
         bio: bioRef.current,
+        image: imageUrl,
       });
       const response = await updateProfile({
         id: user?.id,
@@ -35,6 +57,7 @@ const EditProfile = () => {
         phoneNumber: phoneRef.current,
         location: locationRef.current,
         bio: bioRef.current,
+        image: imageUrl,
       });
 
       if (!!response) {
@@ -48,6 +71,8 @@ const EditProfile = () => {
         err.length > 0 && typeof err !== 'string' ? err[0] : err,
       );
       console.log('Update profile error: ', err);
+    } finally {
+      setLoadingToStorage(false);
     }
   };
 
@@ -61,14 +86,16 @@ const EditProfile = () => {
             {/* Avatar container */}
             <View style={styles.avatarContainer}>
               <Avatar
-                uri={user ? user.image : null}
+                uri={
+                  pickedImage?.uri ? pickedImage.uri : user ? user.image : null
+                }
                 size={scale(110)}
                 rounded={theme.spacing.radius.xxl * 1.4}
               />
               <TouchableHighlight
                 style={styles.editIcon}
                 underlayColor={theme.palette.gray}
-                onPress={() => {}}>
+                onPress={() => pickAvatar()}>
                 <Icon name="camera" strokeWidth={2.5} size={scale(20)} />
               </TouchableHighlight>
             </View>
@@ -94,7 +121,7 @@ const EditProfile = () => {
               autoCorrect={false}
               dataDetectorTypes="none"
               autoCapitalize="words"
-              editable={!isLoading}
+              editable={!isLoading || !isLoadingToStorage}
             />
             <Input
               onChangeText={(value: string) => {
@@ -107,7 +134,7 @@ const EditProfile = () => {
               placeholder={'Enter your phone..'}
               autoCorrect={false}
               dataDetectorTypes="none"
-              editable={!isLoading}
+              editable={!isLoading || !isLoadingToStorage}
             />
             <Input
               onChangeText={(value: string) => {
@@ -124,7 +151,7 @@ const EditProfile = () => {
               placeholder={'Enter your location..'}
               autoCorrect={false}
               dataDetectorTypes="none"
-              editable={!isLoading}
+              editable={!isLoading || !isLoadingToStorage}
             />
             <Input
               onChangeText={(value: string) => {
@@ -134,7 +161,7 @@ const EditProfile = () => {
               placeholder={'Tell about yourself..'}
               autoCorrect={false}
               dataDetectorTypes="none"
-              editable={!isLoading}
+              editable={!isLoading || !isLoadingToStorage}
               multiline={true}
               numberOfLines={4}
               textAlignVertical="top"
@@ -146,7 +173,7 @@ const EditProfile = () => {
             />
             <Button
               title="Update"
-              loading={isLoading}
+              loading={isLoading || isLoadingToStorage}
               onPress={() => handleUpdate()}
             />
           </View>

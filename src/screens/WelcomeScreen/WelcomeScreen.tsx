@@ -6,9 +6,11 @@ import {scale} from '../../utils';
 import Button from '../../components/Buttons/Button/Button';
 import {styles} from './styles';
 import {useNavigation} from '@react-navigation/native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const WelcomeScreen = () => {
   const navigation = useNavigation<any>();
+
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <StatusBar

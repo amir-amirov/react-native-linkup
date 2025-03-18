@@ -34,6 +34,15 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+  <!-- Select image/video from the gallery -->
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>We need access to your photo library to select images and videos.</string>
+  <!-- Capture Image -->
+  <key>NSCameraUsageDescription</key>
+  <string>We need access to your camera to take photos.</string>
+  <!-- Capture Video -->
+  <key>NSMicrophoneUsageDescription</key>
+  <string>We need access to your microphone to record videos.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
