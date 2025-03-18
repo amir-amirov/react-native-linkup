@@ -2034,6 +2034,11 @@
   dependencies:
     firebase "11.3.1"
 
+"@react-native-firebase/storage@^21.12.0":
+  version "21.12.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-21.12.0.tgz#7fc017cc9aa76bdcfeda4550db8794880b2e63b8"
+  integrity sha512-LXmStca5DBjg2bSLzBVo7PstdQ1lfYOYo5oKkJwrTZA46jJIktj38jLhGS9HIMhEzy0KWKXmpDHCzEXMzXSqFw==
+
 "@react-native/assets-registry@0.78.0":
   version "0.78.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.78.0.tgz#e18165f05424bfd2240662ee1dcc4e13a3b9dab8"
