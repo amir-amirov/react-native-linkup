@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {Suspense, useEffect} from 'react';
+import React, {Suspense} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import AppNavigator from './src/navigation';
 import {Provider} from 'react-redux';
