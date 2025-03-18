@@ -1,5 +1,11 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useRef, useState} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -7,9 +13,24 @@ import {scale} from '../../utils';
 import Avatar from '../../components/Avatar/Avatar';
 import {useUser} from '../../store/user';
 import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
+import {useNavigation} from '@react-navigation/native';
+import Icon from '../../components/Icon/Icon';
+import Button from '../../components/Buttons/Button/Button';
 
 const NewPostScreen = () => {
   const {user} = useUser();
+
+  const bodyRef = useRef('');
+  const editorRef = useRef('');
+
+  const navigation = useNavigation();
+  const [isLoading, setLoading] = useState(false);
+  const [file, setFile] = useState();
+
+  const onPick = (isImage: boolean) => {};
+
+  const onSubmit = () => {};
+
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <View style={styles.container}>
@@ -28,9 +49,43 @@ const NewPostScreen = () => {
           </View>
 
           <View style={styles.textEditor}>
-            <RichTextEditor />
+            <RichTextEditor
+              editorRef={editorRef}
+              onChange={(body: any) => (bodyRef.current = body)}
+            />
+          </View>
+
+          <View style={styles.media}>
+            <Text style={styles.addImageText}>Add to your post</Text>
+            <View style={styles.mediaIcons}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => onPick(true)}>
+                <Icon
+                  name="image"
+                  size={scale(30)}
+                  color={theme.palette.dark}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => onPick(false)}>
+                <Icon
+                  name="video"
+                  size={scale(33)}
+                  color={theme.palette.dark}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
+
+        <Button
+          buttonStyle={{height: scale(60)}}
+          title="Post"
+          loading={false}
+          onPress={() => onSubmit()}
+        />
       </View>
     </ScreenWrapper>
   );
@@ -42,7 +97,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: scale(15),
-    paddingTop: scale(10),
+    paddingVertical: scale(10),
     gap: scale(20),
   },
   title: {
@@ -90,5 +145,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: scale(15),
+  },
+  addImageText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.palette.text,
+  },
+  imageIcon: {
+    borderRadius: theme.spacing.radius.md,
+  },
+  file: {
+    height: scale(50),
+    width: '100%',
   },
 });
