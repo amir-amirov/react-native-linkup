@@ -15,6 +15,6 @@ export const uploadImageToFirebase = async (filePath: any) => {
     return urlOfImage;
   } catch (err) {
     console.error('Upload failed: ', err);
-    return null;
+    return '';
   }
 };

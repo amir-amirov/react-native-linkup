@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   container: {justifyContent: 'center', marginBottom: scale(30)},
   logoutButton: {
     position: 'absolute',
+    top: 0,
     right: 0,
     padding: scale(5),
     borderRadius: theme.spacing.radius.sm,

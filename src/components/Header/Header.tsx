@@ -4,10 +4,7 @@ import {scale} from '../../utils';
 import BackButton from '../Buttons/BackButton/BackButton';
 import {useNavigation} from '@react-navigation/native';
 import theme from '../../theme';
-import {
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface Props {
   title: string;
@@ -48,6 +45,7 @@ const styles = StyleSheet.create({
     gap: scale(10),
   },
   title: {
+    marginTop: scale(5),
     fontSize: 24,
     fontWeight: '600',
     color: theme.palette.textDark,
@@ -55,5 +53,6 @@ const styles = StyleSheet.create({
   showBackButton: {
     position: 'absolute',
     left: 0,
+    top: 0,
   },
 });

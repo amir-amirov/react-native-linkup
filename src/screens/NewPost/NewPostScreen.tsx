@@ -23,16 +23,19 @@ import {getFileType} from '../../utils/getFileType';
 import {Asset} from 'react-native-image-picker';
 import Video from 'react-native-video';
 import {uploadImageToFirebase} from '../../utils/uploadImageToFirebase';
+import useCreatePostMutation from '../../services/ReactQuery/useCreatePostMutation';
 
 const NewPostScreen = () => {
   const {user} = useUser();
+
+  const mutation = useCreatePostMutation();
 
   const bodyRef = useRef('');
   const editorRef = useRef('');
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const navigation = useNavigation();
-  const [isLoading, setLoading] = useState(false);
+  const navigation = useNavigation<any>();
+  const [isUploadingToStorage, setUploadingToStorage] = useState(false);
   const [file, setFile] = useState<Asset | null>(null);
 
   const onPick = async (isImage: boolean) => {
@@ -48,20 +51,28 @@ const NewPostScreen = () => {
         Alert.alert('Post', 'Please choose an image or add post body');
         return;
       }
-
-      const imageUrl = await uploadImageToFirebase(file?.uri);
+      let imageUrl: string = '';
+      if (file) {
+        setUploadingToStorage(true);
+        imageUrl = await uploadImageToFirebase(file);
+      }
 
       let data = {
         body: bodyRef.current,
         file: imageUrl,
       };
+
+      mutation.mutate(data, {
+        onSuccess: () => {
+          navigation.navigate('Home');
+        },
+      });
     } catch (err: any) {
       console.log('Error: ', err);
       Alert.alert('Error', err.message);
     } finally {
+      setUploadingToStorage(false);
     }
-
-    // create post
   };
 
   useEffect(() => {
@@ -94,6 +105,7 @@ const NewPostScreen = () => {
             <RichTextEditor
               editorRef={editorRef}
               onChange={(body: any) => (bodyRef.current = body)}
+              editable={!isUploadingToStorage && !mutation.isPending}
             />
           </View>
 
@@ -117,7 +129,8 @@ const NewPostScreen = () => {
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.closeIcon}
-                onPress={() => setFile(null)}>
+                onPress={() => setFile(null)}
+                disabled={isUploadingToStorage || mutation.isPending}>
                 <Icon
                   name="delete"
                   size={scale(20)}
@@ -132,7 +145,8 @@ const NewPostScreen = () => {
             <View style={styles.mediaIcons}>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => onPick(true)}>
+                onPress={() => onPick(true)}
+                disabled={isUploadingToStorage || mutation.isPending}>
                 <Icon
                   name="image"
                   size={scale(30)}
@@ -141,7 +155,8 @@ const NewPostScreen = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => onPick(false)}>
+                onPress={() => onPick(false)}
+                disabled={isUploadingToStorage || mutation.isPending}>
                 <Icon
                   name="video"
                   size={scale(33)}
@@ -155,7 +170,7 @@ const NewPostScreen = () => {
         <Button
           buttonStyle={{height: scale(60)}}
           title="Post"
-          loading={false}
+          loading={isUploadingToStorage || mutation.isPending}
           onPress={() => onSubmit()}
         />
       </View>
