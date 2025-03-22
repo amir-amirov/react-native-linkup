@@ -2,7 +2,7 @@ import axios from 'axios';
 import {store} from '../../store/index';
 import {userActions} from '../../store/user/slice';
 import Config from 'react-native-config';
-import {deleteJWT, storeJWT} from '../../utils/storage';
+import {deleteJWT, getJWT, storeJWT} from '../../utils/storage';
 
 export const accessToken = 'accessToken';
 export const refreshToken = 'refreshToken';
@@ -76,8 +76,12 @@ baseService.interceptors.response.use(
 );
 
 baseService.interceptors.request.use(
-  config => {
-    console.log('Request sent:', config);
+  async config => {
+    const jwt = await getJWT();
+    if (jwt?.accessToken) {
+      config.headers.Authorization = `Bearer ${jwt.accessToken}`;
+    }
+
     return config;
   },
   error => Promise.reject(error),

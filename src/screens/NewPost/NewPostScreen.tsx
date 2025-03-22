@@ -1,11 +1,13 @@
 import {
+  Alert,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -16,26 +18,77 @@ import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
 import {useNavigation} from '@react-navigation/native';
 import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Buttons/Button/Button';
+import {openGallery} from '../../utils/openGallery';
+import {getFileType} from '../../utils/getFileType';
+import {Asset} from 'react-native-image-picker';
+import Video from 'react-native-video';
+import {uploadImageToFirebase} from '../../utils/uploadImageToFirebase';
+import useCreatePostMutation from '../../services/ReactQuery/useCreatePostMutation';
 
 const NewPostScreen = () => {
   const {user} = useUser();
 
+  const mutation = useCreatePostMutation();
+
   const bodyRef = useRef('');
   const editorRef = useRef('');
+  const scrollViewRef = useRef<ScrollView>(null);
 
-  const navigation = useNavigation();
-  const [isLoading, setLoading] = useState(false);
-  const [file, setFile] = useState();
+  const navigation = useNavigation<any>();
+  const [isUploadingToStorage, setUploadingToStorage] = useState(false);
+  const [file, setFile] = useState<Asset | null>(null);
 
-  const onPick = (isImage: boolean) => {};
+  const onPick = async (isImage: boolean) => {
+    const media = await openGallery(isImage);
+    if (media != null) {
+      setFile(media);
+    }
+  };
 
-  const onSubmit = () => {};
+  const onSubmit = async () => {
+    try {
+      if (!bodyRef.current && !file) {
+        Alert.alert('Post', 'Please choose an image or add post body');
+        return;
+      }
+      let imageUrl: string = '';
+      if (file) {
+        setUploadingToStorage(true);
+        imageUrl = await uploadImageToFirebase(file);
+      }
+
+      let data = {
+        body: bodyRef.current,
+        file: imageUrl,
+      };
+
+      mutation.mutate(data, {
+        onSuccess: () => {
+          navigation.navigate('Home');
+        },
+      });
+    } catch (err: any) {
+      console.log('Error: ', err);
+      Alert.alert('Error', err.message);
+    } finally {
+      setUploadingToStorage(false);
+    }
+  };
+
+  useEffect(() => {
+    if (file && scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({animated: true});
+    }
+  }, [file]);
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <View style={styles.container}>
-        <Header title="Create Post" showBackButton={true} />
-        <ScrollView contentContainerStyle={{gap: scale(20)}}>
+        <Header title="Create Post" showBackButton={true} mb={0} />
+        <ScrollView
+          ref={scrollViewRef}
+          contentContainerStyle={{gap: scale(20)}}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <Avatar
               uri={user ? user.image : null}
@@ -52,15 +105,48 @@ const NewPostScreen = () => {
             <RichTextEditor
               editorRef={editorRef}
               onChange={(body: any) => (bodyRef.current = body)}
+              editable={!isUploadingToStorage && !mutation.isPending}
             />
           </View>
+
+          {file && (
+            <View style={styles.file}>
+              {getFileType(file) === 'video' ? (
+                <Video
+                  source={{uri: file.uri}}
+                  resizeMode="cover"
+                  style={{flex: 1}}
+                  controls={true}
+                />
+              ) : (
+                <Image
+                  source={{uri: file.uri}}
+                  resizeMode="cover"
+                  style={{flex: 1}}
+                />
+              )}
+
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.closeIcon}
+                onPress={() => setFile(null)}
+                disabled={isUploadingToStorage || mutation.isPending}>
+                <Icon
+                  name="delete"
+                  size={scale(20)}
+                  color={theme.palette.white}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
 
           <View style={styles.media}>
             <Text style={styles.addImageText}>Add to your post</Text>
             <View style={styles.mediaIcons}>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => onPick(true)}>
+                onPress={() => onPick(true)}
+                disabled={isUploadingToStorage || mutation.isPending}>
                 <Icon
                   name="image"
                   size={scale(30)}
@@ -69,7 +155,8 @@ const NewPostScreen = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => onPick(false)}>
+                onPress={() => onPick(false)}
+                disabled={isUploadingToStorage || mutation.isPending}>
                 <Icon
                   name="video"
                   size={scale(33)}
@@ -83,7 +170,7 @@ const NewPostScreen = () => {
         <Button
           buttonStyle={{height: scale(60)}}
           title="Post"
-          loading={false}
+          loading={isUploadingToStorage || mutation.isPending}
           onPress={() => onSubmit()}
         />
       </View>
@@ -155,7 +242,19 @@ const styles = StyleSheet.create({
     borderRadius: theme.spacing.radius.md,
   },
   file: {
-    height: scale(50),
+    height: scale(250),
     width: '100%',
+    borderRadius: theme.spacing.radius.xl,
+    overflow: 'hidden',
+    borderCurve: 'continuous',
+  },
+  video: {},
+  closeIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: scale(7),
+    borderRadius: scale(50),
+    backgroundColor: 'rgba(255,0,0,0.6)',
   },
 });
