@@ -1,5 +1,5 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {Share, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useRef, useState} from 'react';
 import {scale, WINDOW_WIDTH} from '../../utils';
 import theme from '../../theme';
 import Avatar from '../Avatar/Avatar';
@@ -9,6 +9,9 @@ import RenderHTML from 'react-native-render-html';
 import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
 import {useNavigation} from '@react-navigation/native';
+import useLikePostMutation from '../../services/ReactQuery/useLikePostMutation';
+import useDislikePostMutation from '../../services/ReactQuery/useDislikePostMutation';
+import {stripHtmlTags} from '../../utils/helpers';
 
 const textStyle = {
   color: theme.palette.dark,
@@ -25,10 +28,57 @@ const tagStyles = {
     color: theme.palette.dark,
   },
 };
+interface Props {
+  item: any;
+  onPress: () => void;
+  showMoreIcon?: boolean;
+}
 
-const PostCard = ({item, currentUser}: any) => {
+const PostCard: React.FC<Props> = ({item, onPress, showMoreIcon = true}) => {
+  const likeMutation = useLikePostMutation();
+  const dislikeMutation = useDislikePostMutation();
+
   const navigation = useNavigation<any>();
   const createdAt = moment(item.created_at).format('MMM D');
+
+  // Local state for optimistic update
+  const [isLiked, setIsLiked] = useState(item?.likedByMe);
+  const [likesCount, setLikesCount] = useState(item.likesCount);
+
+  // Prevent excessive requests
+  const likeTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleLikePress = () => {
+    // Optimistically toggle like state
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+
+    setLikesCount((prev: number) => (newLikedState ? prev + 1 : prev - 1));
+
+    // Clear previous timeout if exists
+    if (likeTimeout.current) {
+      clearTimeout(likeTimeout.current);
+    }
+
+    // Delay API request to prevent spam
+    likeTimeout.current = setTimeout(() => {
+      if (newLikedState) {
+        likeMutation.mutate(item.id);
+      } else {
+        dislikeMutation.mutate(item.id);
+      }
+    }, 500); // 500ms debounce
+  };
+
+  const onShare = () => {
+    let content = {message: stripHtmlTags(item?.body)};
+    if (item?.file) {
+      // download the file then share the local uri
+    }
+
+    Share.share(content);
+  };
+
   return (
     <View style={[styles.container, styles.shadowStyles]}>
       <View style={styles.header}>
@@ -36,26 +86,28 @@ const PostCard = ({item, currentUser}: any) => {
         <View style={styles.userInfo}>
           <Avatar
             size={scale(50)}
-            uri={item.user_image}
+            uri={item.user_image ?? item.user.image}
             rounded={theme.spacing.radius.md}
           />
 
           <View style={{gap: scale(2)}}>
             <Text style={styles.username} numberOfLines={1}>
-              {item.user_name}
+              {item.user_name ?? item.user.name}
             </Text>
             <Text style={styles.postTime}>{createdAt}</Text>
           </View>
         </View>
 
-        <TouchableOpacity onPress={() => {}} hitSlop={scale(5)}>
-          <Icon
-            name="threeDotsHorizontal"
-            size={scale(30)}
-            strokeWidth={scale(3)}
-            color={theme.palette.text}
-          />
-        </TouchableOpacity>
+        {showMoreIcon && (
+          <TouchableOpacity onPress={() => onPress()} hitSlop={scale(5)}>
+            <Icon
+              name="threeDotsHorizontal"
+              size={scale(30)}
+              strokeWidth={scale(3)}
+              color={theme.palette.text}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* post body & media */}
@@ -92,19 +144,27 @@ const PostCard = ({item, currentUser}: any) => {
       {/* like comment and share */}
       <View style={styles.footer}>
         <View style={styles.footerButton}>
-          <TouchableOpacity activeOpacity={0.5}>
-            <Icon
-              name="heart"
-              size={scale(24)}
-              color={theme.palette.textLight}
-            />
+          <TouchableOpacity activeOpacity={0.5} onPress={handleLikePress}>
+            {isLiked ? (
+              <Icon
+                name="heart"
+                size={scale(24)}
+                color={theme.palette.roseLight}
+                fill={theme.palette.roseLight}
+              />
+            ) : (
+              <Icon
+                name="heart"
+                size={scale(24)}
+                color={theme.palette.textLight}
+                fill={'none'}
+              />
+            )}
           </TouchableOpacity>
-          <Text style={styles.count}>{item.likesCount}</Text>
+          <Text style={styles.count}>{likesCount}</Text>
         </View>
         <View style={styles.footerButton}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.navigate('Comments')}>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => onPress()}>
             <Icon
               name="comment"
               size={scale(24)}
@@ -113,7 +173,7 @@ const PostCard = ({item, currentUser}: any) => {
           </TouchableOpacity>
         </View>
         <View style={styles.footerButton}>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} onPress={onShare}>
             <Icon
               name="share"
               size={scale(24)}

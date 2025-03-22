@@ -22,7 +22,7 @@ const HomeScreen = () => {
     return response.data;
   };
 
-  const {data, status, error, isFetchingNextPage, fetchNextPage} =
+  const {data, status, error, isFetchingNextPage, fetchNextPage, isFetching} =
     useInfiniteQuery({
       queryKey: ['posts'],
       queryFn: fetchPosts,
@@ -38,7 +38,7 @@ const HomeScreen = () => {
 
   const posts = data?.pages.map(page => page.data).flat();
 
-  if (status === 'pending') {
+  if (isFetching) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Loading..</Text>
@@ -160,7 +160,12 @@ const HomeScreen = () => {
           contentContainerStyle={styles.listStyle}
           keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}
-          renderItem={({item}) => <PostCard item={item} currentUser={user} />}
+          renderItem={({item}) => (
+            <PostCard
+              item={item}
+              onPress={() => navigation.navigate('PostDetails', {post: item})}
+            />
+          )}
           onEndReached={() => {
             fetchNextPage();
           }}

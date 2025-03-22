@@ -11,4 +11,5 @@ export const palette = {
   roseLight: '#f87171',
   white: '#FFFFFF',
   black: '#000000',
+  background: '#F5F5F5',
 };

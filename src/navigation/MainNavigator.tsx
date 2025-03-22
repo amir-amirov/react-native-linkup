@@ -6,7 +6,7 @@ import ProfileScreen from '../screens/Profile/ProfileScreen';
 import NotificationScreen from '../screens/Notifications/NotificationScreen';
 import NewPostScreen from '../screens/NewPost/NewPostScreen';
 import EditProfile from '../screens/EditProfile/EditProfile';
-import CommentsScreen from '../screens/Comments/CommentsScreen';
+import PostDetails from '../screens/PostDetails/PostDetails';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -42,8 +42,8 @@ const MainNavigator = () => {
         // options={{presentation: 'modal'}}
       />
       <Stack.Screen
-        name="Comments"
-        component={CommentsScreen}
+        name="PostDetails"
+        component={PostDetails}
         options={{presentation: 'modal'}}
       />
     </Stack.Navigator>

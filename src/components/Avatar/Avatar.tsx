@@ -20,10 +20,7 @@ const Avatar: React.FC<Props> = ({
 }) => {
   return (
     <FastImage
-      source={{
-        ...getUserImageSrc(uri),
-        cache: FastImage.cacheControl.immutable,
-      }}
+      source={getUserImageSrc(uri)}
       style={[
         styles.avatar,
         {height: size, width: size, borderRadius: rounded},
