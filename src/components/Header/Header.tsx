@@ -4,7 +4,7 @@ import {scale} from '../../utils';
 import BackButton from '../Buttons/BackButton/BackButton';
 import {useNavigation} from '@react-navigation/native';
 import theme from '../../theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Platform} from 'react-native';
 
 interface Props {
   title: string;
@@ -16,20 +16,18 @@ const Header: React.FC<Props> = ({
   showBackButton = false,
   mb = scale(10),
 }) => {
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
   return (
-    <View
-      style={[
-        styles.container,
-        {marginBottom: mb, marginTop: insets.top > 0 ? 0 : scale(10)},
-      ]}>
+    <View style={[styles.container, {marginBottom: mb}]}>
       {showBackButton && (
         <View style={styles.showBackButton}>
           <BackButton onPress={() => navigation.goBack()} />
         </View>
       )}
-      <Text style={styles.title}>{title || ''}</Text>
+      <Text
+        style={[styles.title, Platform.OS === 'ios' ? {top: 0} : {bottom: 0}]}>
+        {title || ''}
+      </Text>
     </View>
   );
 };
@@ -38,11 +36,14 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: scale(5),
     gap: scale(10),
+    // borderColor: 'black',
+    // borderWidth: 0.5,
   },
   title: {
     marginTop: scale(5),
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
   showBackButton: {
     position: 'absolute',
     left: 0,
-    top: 0,
+    // top: 0,
+    bottom: Platform.OS === 'ios' ? undefined : 0,
   },
 });

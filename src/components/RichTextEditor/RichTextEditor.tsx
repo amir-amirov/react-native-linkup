@@ -40,9 +40,13 @@ const RichTextEditor = ({editorRef, onChange}: any) => {
       <RichEditor
         ref={editorRef}
         containerStyle={styles.rich}
-        editorStyle={styles.contentStyle}
+        editorStyle={{
+          ...styles.contentStyle,
+          caretColor: theme.palette.primary,
+        }}
         placeholder="What's on your mind?"
         onChange={onChange}
+        initialFocus={true}
       />
     </View>
   );

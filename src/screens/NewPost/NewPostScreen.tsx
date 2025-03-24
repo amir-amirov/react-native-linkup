@@ -1,9 +1,11 @@
 import {
   Alert,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -24,12 +26,14 @@ import {Asset} from 'react-native-image-picker';
 import Video from 'react-native-video';
 import {uploadImageToFirebase} from '../../utils/uploadImageToFirebase';
 import useCreatePostMutation from '../../services/ReactQuery/useCreatePostMutation';
+import SimpleTextEditor from '../../components/SimpleTextEditor/SimpleTextEditor';
 
 const NewPostScreen = () => {
   const {user} = useUser();
 
   const mutation = useCreatePostMutation();
 
+  const [postBody, setPostBody] = useState('');
   const bodyRef = useRef('');
   const editorRef = useRef('');
   const scrollViewRef = useRef<ScrollView>(null);
@@ -47,10 +51,12 @@ const NewPostScreen = () => {
 
   const onSubmit = async () => {
     try {
-      if (!bodyRef.current && !file) {
+      if (!postBody && !file) {
         Alert.alert('Post', 'Please choose an image or add post body');
         return;
       }
+
+      console.log('I wrote: ', postBody);
       let imageUrl: string = '';
       if (file) {
         setUploadingToStorage(true);
@@ -58,7 +64,7 @@ const NewPostScreen = () => {
       }
 
       let data = {
-        body: bodyRef.current,
+        body: postBody,
         file: imageUrl,
       };
 
@@ -102,11 +108,42 @@ const NewPostScreen = () => {
           </View>
 
           <View style={styles.textEditor}>
-            <RichTextEditor
-              editorRef={editorRef}
-              onChange={(body: any) => (bodyRef.current = body)}
-              editable={!isUploadingToStorage && !mutation.isPending}
-            />
+            {Platform.OS == 'ios' ? (
+              <RichTextEditor
+                editorRef={editorRef}
+                onChange={(body: any) => setPostBody(body)}
+                editable={!isUploadingToStorage && !mutation.isPending}
+              />
+            ) : (
+              // <TextInput
+              //   multiline
+              //   placeholder="What's on your mind?"
+              //   placeholderTextColor={theme.palette.textLight}
+              //   onChangeText={setPostBody}
+              //   value={postBody}
+              //   editable={!isUploadingToStorage && !mutation.isPending}
+              //   autoFocus
+              //   selectionColor={theme.palette.primary}
+              //   style={{
+              //     minHeight: scale(240),
+              //     flex: 1,
+              //     borderWidth: 1.5,
+              //     // borderTopWidth: 0,
+              //     borderRadius: theme.spacing.radius.xl,
+              //     // borderBottomLeftRadius: theme.spacing.radius.xl,
+              //     borderColor: theme.palette.gray,
+              //     paddingHorizontal: scale(15),
+              //     paddingVertical: scale(10),
+              //     color: theme.palette.textDark,
+              //     textAlignVertical: 'top',
+              //   }}
+              // />
+              <SimpleTextEditor
+                value={postBody}
+                setValue={setPostBody}
+                editable={!isUploadingToStorage && !mutation.isPending}
+              />
+            )}
           </View>
 
           {file && (

@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.palette.white,
     borderWidth: 0.5,
     borderColor: theme.palette.gray,
+    overflow: 'hidden',
     shadowColor: '#000',
   },
   header: {
@@ -261,6 +262,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.06,
     shadowRadius: 6,
-    elevation: 1,
+    // elevation: 1,
   },
 });

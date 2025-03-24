@@ -1,4 +1,11 @@
-import {Alert, StyleSheet, TouchableHighlight, View, Text} from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  TouchableHighlight,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
 import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import {scale} from '../../utils';
@@ -30,8 +37,11 @@ const ProfileScreen = () => {
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
-      <View
-        style={{flex: 1, paddingHorizontal: scale(20), position: 'relative'}}>
+      <StatusBar
+        backgroundColor={theme.palette.black}
+        barStyle={'dark-content'}
+      />
+      <View style={{flex: 1, paddingHorizontal: scale(20)}}>
         <ProfileHeader handleLogout={logout} />
 
         <View style={styles.container}>
