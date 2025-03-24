@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, TouchableHighlight, View, Text} from 'react-native';
+import {Alert, TouchableHighlight, View, Text} from 'react-native';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -17,18 +17,13 @@ import {Controller, useForm} from 'react-hook-form';
 import {ProfileFormData, profileSchema} from './scheme';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {deleteFileFromFirebaseStorage} from '../../utils/deleteImageFromFirebase';
+import {styles} from './styles';
 
 const EditProfile = () => {
   const {user, isLoading, setUser, updateProfile} = useUser();
   const navigation = useNavigation();
 
   const [isLoadingToStorage, setLoadingToStorage] = useState(false);
-
-  const nameRef = useRef('');
-  const phoneRef = useRef('');
-  const locationRef = useRef('');
-  const bioRef = useRef('');
-
   const [pickedImage, setPickedImage] = useState<Asset | undefined>();
 
   // This will store the link I upload to storage,
@@ -112,61 +107,6 @@ const EditProfile = () => {
       uploadedImageUrl.current = '';
     }
   };
-
-  // const handleUpdate = async (data: ProfileFormData) => {
-  //   try {
-  //     setLoadingToStorage(true);
-
-  //     if (pickedImage) {
-  //       uploadedImageUrl.current = await uploadImageToFirebase(pickedImage);
-  //     }
-
-  //     if (
-  //       data.name === user?.name &&
-  //       data.phoneNumber === user.phoneNumber &&
-  //       data.location === user.location &&
-  //       data.bio === user.bio &&
-  //       !pickedImage
-  //     ) {
-  //       Alert.alert('Sorry', "You didn't change anything..");
-  //       return;
-  //     }
-
-  //     let updateProfileData;
-
-  //     if (uploadedImageUrl.current) {
-  //       updateProfileData = {
-  //         id: user?.id,
-  //         ...data,
-  //         image: uploadedImageUrl.current,
-  //       };
-  //     } else {
-  //       updateProfileData = {
-  //         id: user?.id,
-  //         ...data,
-  //       };
-  //     }
-  //     const response = await updateProfile(updateProfileData);
-
-  //     if (!!response) {
-  //       setUser(response);
-  //     }
-
-  //     navigation.goBack();
-  //   } catch (err: any) {
-  //     Alert.alert(
-  //       'Sorry',
-  //       err.length > 0 && typeof err !== 'string' ? err[0] : err,
-  //     );
-  //     console.log('Update profile error: ', err);
-  //     if (uploadedImageUrl.current) {
-  //       deleteFileFromFirebaseStorage(uploadedImageUrl.current);
-  //     }
-  //   } finally {
-  //     setLoadingToStorage(false);
-  //     uploadedImageUrl.current = '';
-  //   }
-  // };
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
@@ -320,35 +260,3 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  avatarContainer: {
-    height: scale(110),
-    width: scale(110),
-    alignSelf: 'center',
-  },
-  editIcon: {
-    position: 'absolute',
-    bottom: 0,
-    right: -12,
-    padding: scale(7),
-    borderRadius: scale(50),
-    backgroundColor: theme.palette.white,
-    shadowColor: theme.palette.textLight,
-    shadowOffset: {width: 0, height: scale(4)},
-    shadowOpacity: 0.4,
-    shadowRadius: scale(5),
-    elevation: 7,
-  },
-  inputView: {
-    gap: scale(5),
-  },
-  error: {
-    color: theme.palette.rose,
-    fontSize: 12,
-    marginLeft: scale(15),
-  },
-});

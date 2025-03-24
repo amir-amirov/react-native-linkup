@@ -61,61 +61,6 @@ const HomeScreen = () => {
     );
   }
 
-  // const posts: any = [
-  //   {
-  //     id: 21,
-  //     body: 'Test1234',
-  //     file: '',
-  //     user_id: 1,
-  //     user_name: 'Amir Amirov',
-  //     user_image:
-  //       'https://firebasestorage.googleapis.com/v0/b/auth-2c46a.appspot.com/o/images%2F17423208391282FC6B89D-8E91-48FA-B104-E0A80B94DAB5.jpg?alt=media&token=451e6f3a-cb76-49cb-b9bf-3c78cfe0b584',
-  //     likesCount: 0,
-  //     likedByMe: false,
-  //     created_at: '2025-03-17T20:16:06.880Z',
-  //     updated_at: '2025-03-17T20:16:06.880Z',
-  //   },
-  //   {
-  //     id: 22,
-  //     body: '<div style="text-align: center;"><b>123</b></div>',
-  //     file: 'https://firebasestorage.googleapis.com/v0/b/auth-2c46a.appspot.com/o/linkup-image%2F17423309757564FEEA8F4-71D7-4761-BB2A-8AA03DBA16F9.jpg?alt=media&token=1def4773-3ecf-4ed8-879e-9f64b7c3878f',
-  //     user_id: 1,
-  //     user_name: 'Amir Amirov',
-  //     user_image:
-  //       'https://firebasestorage.googleapis.com/v0/b/auth-2c46a.appspot.com/o/images%2F17423208391282FC6B89D-8E91-48FA-B104-E0A80B94DAB5.jpg?alt=media&token=451e6f3a-cb76-49cb-b9bf-3c78cfe0b584',
-  //     likesCount: 0,
-  //     likedByMe: false,
-  //     created_at: '2025-03-18T20:49:40.425Z',
-  //     updated_at: '2025-03-18T20:49:40.425Z',
-  //   },
-  //   {
-  //     id: 23,
-  //     body: '<div>My name is Amir Amirov and I am building mobile application with React Native!</div>',
-  //     file: 'https://firebasestorage.googleapis.com/v0/b/auth-2c46a.appspot.com/o/linkup-image%2F1742331153857FD4C931E-49F0-43CC-BF0C-26075A045F76.jpg?alt=media&token=80cd5a60-3c93-4167-8d0f-a5fd4adb5135',
-  //     user_id: 1,
-  //     user_name: 'Amir Amirov',
-  //     user_image:
-  //       'https://firebasestorage.googleapis.com/v0/b/auth-2c46a.appspot.com/o/images%2F17423208391282FC6B89D-8E91-48FA-B104-E0A80B94DAB5.jpg?alt=media&token=451e6f3a-cb76-49cb-b9bf-3c78cfe0b584',
-  //     likesCount: 0,
-  //     likedByMe: false,
-  //     created_at: '2025-03-18T20:52:37.879Z',
-  //     updated_at: '2025-03-18T20:52:37.879Z',
-  //   },
-  //   {
-  //     id: 24,
-  //     body: '<div style="text-align: left;"><b><i>This is fake! Earth is flat!!!</i></b></div>',
-  //     file: 'https://firebasestorage.googleapis.com/v0/b/auth-2c46a.appspot.com/o/linkup-video%2F1742335972067video-test-61C9AEC3-7F94-4971-9114-20BB4A28BFA7.mov?alt=media&token=500c4bb7-553c-4701-8872-7a0518794bbf',
-  //     user_id: 1,
-  //     user_name: 'Amir Amirov',
-  //     user_image:
-  //       'https://firebasestorage.googleapis.com/v0/b/auth-2c46a.appspot.com/o/images%2F17423208391282FC6B89D-8E91-48FA-B104-E0A80B94DAB5.jpg?alt=media&token=451e6f3a-cb76-49cb-b9bf-3c78cfe0b584',
-  //     likesCount: 0,
-  //     likedByMe: false,
-  //     created_at: '2025-03-18T22:12:55.864Z',
-  //     updated_at: '2025-03-18T22:12:55.864Z',
-  //   },
-  // ];
-
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <StatusBar

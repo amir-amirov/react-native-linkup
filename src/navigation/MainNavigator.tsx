@@ -7,6 +7,7 @@ import NotificationScreen from '../screens/Notifications/NotificationScreen';
 import NewPostScreen from '../screens/NewPost/NewPostScreen';
 import EditProfile from '../screens/EditProfile/EditProfile';
 import PostDetails from '../screens/PostDetails/PostDetails';
+import TargetProfileScreen from '../screens/TargetProfile/TargetProfileScreen';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -48,6 +49,13 @@ const MainNavigator = () => {
           presentation: Platform.OS === 'ios' ? 'modal' : undefined,
           animation:
             Platform.OS === 'android' ? 'slide_from_bottom' : undefined,
+        }}
+      />
+      <Stack.Screen
+        name="TargetProfileScreen"
+        component={TargetProfileScreen}
+        options={{
+          animation: 'slide_from_left',
         }}
       />
     </Stack.Navigator>

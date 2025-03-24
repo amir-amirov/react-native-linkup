@@ -1,4 +1,11 @@
-import {Share, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Share,
+  StyleSheet,
+  Text,
+  Touchable,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {scale, WINDOW_WIDTH} from '../../utils';
 import theme from '../../theme';
@@ -12,6 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import useLikePostMutation from '../../services/ReactQuery/useLikePostMutation';
 import useDislikePostMutation from '../../services/ReactQuery/useDislikePostMutation';
 import {stripHtmlTags} from '../../utils/helpers';
+import {useUser} from '../../store/user';
 
 const textStyle = {
   color: theme.palette.dark,
@@ -35,6 +43,8 @@ interface Props {
 }
 
 const PostCard: React.FC<Props> = ({item, onPress, showMoreIcon = true}) => {
+  const {user} = useUser();
+
   const likeMutation = useLikePostMutation();
   const dislikeMutation = useDislikePostMutation();
 
@@ -83,7 +93,16 @@ const PostCard: React.FC<Props> = ({item, onPress, showMoreIcon = true}) => {
     <View style={[styles.container, styles.shadowStyles]}>
       <View style={styles.header}>
         {/* user info and post time */}
-        <View style={styles.userInfo}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() =>
+            item.user_id === user?.id
+              ? navigation.navigate('Profile')
+              : navigation.navigate('TargetProfileScreen', {
+                  userId: item.user_id,
+                })
+          }
+          style={styles.userInfo}>
           <Avatar
             size={scale(50)}
             uri={item.user_image ?? item.user.image}
@@ -96,7 +115,7 @@ const PostCard: React.FC<Props> = ({item, onPress, showMoreIcon = true}) => {
             </Text>
             <Text style={styles.postTime}>{createdAt}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         {showMoreIcon && (
           <TouchableOpacity onPress={() => onPress()} hitSlop={scale(5)}>

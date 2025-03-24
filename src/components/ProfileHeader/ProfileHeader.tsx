@@ -7,19 +7,22 @@ import {scale} from '../../utils';
 
 interface Props {
   handleLogout: () => void;
+  showLogout?: boolean;
 }
 
-const ProfileHeader: React.FC<Props> = ({handleLogout}) => {
+const ProfileHeader: React.FC<Props> = ({handleLogout, showLogout = true}) => {
   return (
     <View style={styles.container}>
       <Header title="Profile" showBackButton={true} />
-      <TouchableHighlight
-        underlayColor={'#fedede'}
-        activeOpacity={0.6}
-        style={styles.logoutButton}
-        onPress={() => handleLogout()}>
-        <Icon name="logout" color={theme.palette.rose} />
-      </TouchableHighlight>
+      {showLogout && (
+        <TouchableHighlight
+          underlayColor={'#fedede'}
+          activeOpacity={0.6}
+          style={styles.logoutButton}
+          onPress={() => handleLogout()}>
+          <Icon name="logout" color={theme.palette.rose} />
+        </TouchableHighlight>
+      )}
     </View>
   );
 };
@@ -29,7 +32,7 @@ export default ProfileHeader;
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginBottom: scale(30),
+    // marginBottom: scale(30),
     padding: 0,
   },
   logoutButton: {

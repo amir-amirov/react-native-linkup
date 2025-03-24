@@ -15,5 +15,3 @@ const ScreenWrapper: React.FC<Props> = ({children, bgView = 'white'}) => {
 };
 
 export default ScreenWrapper;
-
-const styles = StyleSheet.create({});

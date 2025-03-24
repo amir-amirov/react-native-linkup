@@ -1,7 +1,6 @@
 import {
   Alert,
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -21,6 +20,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {LoginFormData, LoginSchema} from './scheme';
+import {styles} from './styles';
 
 const LoginScreen = () => {
   const {isLoading, setIsAuth, loginUser, setUser} = useUser();
@@ -28,7 +28,6 @@ const LoginScreen = () => {
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
 
-  const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
   const {
@@ -128,9 +127,10 @@ const LoginScreen = () => {
                       strokeWidth={scale(1.6)}
                     />
                   }
-                  placeholder={'Enter your password'}
+                  ref={passwordInputRef}
                   value={value}
                   onChangeText={onChange}
+                  placeholder={'Enter your password'}
                   returnKeyType="done"
                   onSubmitEditing={handleSubmit(onSubmit)}
                   editable={!isLoading}
@@ -174,47 +174,3 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: scale(45),
-    paddingHorizontal: scale(20),
-  },
-  welcomeText: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: theme.palette.text,
-  },
-  form: {
-    gap: scale(25),
-  },
-  inputLabel: {
-    fontSize: 16,
-    color: theme.palette.text,
-  },
-  forgotPassword: {
-    textAlign: 'right',
-    fontWeight: '600',
-    color: theme.palette.text,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: scale(5),
-  },
-  footerText: {
-    textAlign: 'center',
-    color: theme.palette.text,
-    fontSize: 16,
-  },
-  inputView: {
-    gap: scale(5),
-  },
-  error: {
-    color: theme.palette.rose,
-    fontSize: 12,
-    marginLeft: scale(15),
-  },
-});
