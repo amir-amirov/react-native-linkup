@@ -20,6 +20,7 @@ import Icon from '../../components/Icon/Icon';
 const ProfileScreen = () => {
   const {user} = useUser();
   const navigation = useNavigation<any>();
+
   const logout = () => {
     Alert.alert('Confirm', 'Are you sure you want to log out?', [
       {
@@ -64,7 +65,7 @@ const ProfileScreen = () => {
             {/* User's details */}
             <View style={{alignItems: 'center', gap: scale(4)}}>
               <Text style={styles.userName}>{user && user.name}</Text>
-              <Text style={styles.infoText}>{user && user.name}</Text>
+              <Text style={styles.infoText}>{user && user.location}</Text>
             </View>
 
             {/* Email, phone, bio */}
