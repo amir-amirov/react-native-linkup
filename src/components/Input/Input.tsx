@@ -12,8 +12,8 @@ const Input = ({containerStyles, icon, inputRef, ...props}: any) => {
         placeholderTextColor={theme.palette.textLight}
         ref={inputRef && inputRef}
         autoCapitalize={'none'}
-        selectionColor={theme.palette.black}
-        cursorColor={theme.palette.black}
+        selectionColor={theme.palette.primary}
+        cursorColor={theme.palette.primary}
         {...props}
       />
     </View>

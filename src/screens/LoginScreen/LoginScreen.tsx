@@ -1,7 +1,6 @@
 import {
   Alert,
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -18,6 +17,10 @@ import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Buttons/Button/Button';
 import {useUser} from '../../store/user';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Controller, useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {LoginFormData, LoginSchema} from './scheme';
+import {styles} from './styles';
 
 const LoginScreen = () => {
   const {isLoading, setIsAuth, loginUser, setUser} = useUser();
@@ -25,26 +28,25 @@ const LoginScreen = () => {
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
 
-  const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const emailRef = useRef('');
-  const passwordRef = useRef('');
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    resolver: zodResolver<LoginFormData>(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const onSubmit = async () => {
-    if (!emailRef.current || !passwordRef.current) {
-      Alert.alert('Login', 'Please fill all the fields!');
-      return;
-    } else {
-      handleLogin();
-    }
-  };
-
-  const handleLogin = async () => {
+  const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await loginUser({
-        email: emailRef.current.toLowerCase(),
-        password: passwordRef.current,
+        email: data.email.toLowerCase(),
+        password: data.password,
       });
 
       if (!!response) {
@@ -60,34 +62,6 @@ const LoginScreen = () => {
       console.log('Login error: ', err);
     }
   };
-  // const login = async (values: FieldValues) => {
-  //   console.log('values', values);
-  //   const { passwordLogin, phone } = values;
-  //   const formattedNumber = phone.replace(/\D/g, '');
-  //   try {
-  //     const res = await loginUser({
-  //       phone: formattedNumber,
-  //       password: passwordLogin,
-  //     });
-
-  //     if (res.email_verified_at) {
-  //       await getCourses(1);
-  //       await getSurahs();
-  //       await getJuzs();
-  //       setAuthorize(true);
-  //     } else {
-  //       await resendValidation(res.email);
-  //       navigation.navigate('CodeConfermation');
-  //     }
-  //   } catch (error: any) {
-  //     console.log('Login error', error);
-  //     Toast.show({
-  //       type: 'info',
-  //       position: 'top',
-  //       text1: error,
-  //     });
-  //   }
-  // };
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
@@ -111,36 +85,63 @@ const LoginScreen = () => {
         {/* Form */}
         <View style={styles.form}>
           <Text style={styles.inputLabel}>Please login to continue</Text>
-          <Input
-            ref={emailInputRef}
-            icon={
-              <Icon name="mail" size={scale(26)} strokeWidth={scale(1.6)} />
-            }
-            placeholder={'Enter your email'}
-            onChangeText={(value: string) => {
-              emailRef.current = value;
-            }}
-            autoCorrect={false}
-            dataDetectorTypes="none"
-            returnKeyType="next"
-            blurOnSubmit={false}
-            onSubmitEditing={() => passwordInputRef.current?.focus()}
-            editable={!isLoading}
-          />
-          <Input
-            ref={passwordInputRef}
-            icon={
-              <Icon name="lock" size={scale(26)} strokeWidth={scale(1.6)} />
-            }
-            placeholder={'Enter your password'}
-            onChangeText={(value: string) => {
-              passwordRef.current = value;
-            }}
-            returnKeyType="done"
-            onSubmitEditing={onSubmit}
-            editable={!isLoading}
-            secureTextEntry
-          />
+          <View style={styles.inputView}>
+            <Controller
+              control={control}
+              name="email"
+              render={({field: {onChange, value}}) => (
+                <Input
+                  icon={
+                    <Icon
+                      name="mail"
+                      size={scale(26)}
+                      strokeWidth={scale(1.6)}
+                    />
+                  }
+                  value={value}
+                  placeholder={'Enter your email'}
+                  onChangeText={onChange}
+                  autoCorrect={false}
+                  dataDetectorTypes="none"
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => passwordInputRef.current?.focus()}
+                  editable={!isLoading}
+                />
+              )}
+            />
+            {errors.email && (
+              <Text style={styles.error}>{errors.email.message}</Text>
+            )}
+          </View>
+          <View style={styles.inputView}>
+            <Controller
+              control={control}
+              name="password"
+              render={({field: {onChange, value}}) => (
+                <Input
+                  icon={
+                    <Icon
+                      name="lock"
+                      size={scale(26)}
+                      strokeWidth={scale(1.6)}
+                    />
+                  }
+                  ref={passwordInputRef}
+                  value={value}
+                  onChangeText={onChange}
+                  placeholder={'Enter your password'}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSubmit(onSubmit)}
+                  editable={!isLoading}
+                  secureTextEntry
+                />
+              )}
+            />
+            {errors.password && (
+              <Text style={styles.error}>{errors.password.message}</Text>
+            )}
+          </View>
           <TouchableOpacity disabled={isLoading} activeOpacity={0.5}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
@@ -148,7 +149,7 @@ const LoginScreen = () => {
           <Button
             title="Login"
             loading={isLoading}
-            onPress={() => onSubmit()}
+            onPress={handleSubmit(onSubmit)}
           />
         </View>
 
@@ -173,39 +174,3 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: scale(45),
-    paddingHorizontal: scale(20),
-  },
-  welcomeText: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: theme.palette.text,
-  },
-  form: {
-    gap: scale(25),
-  },
-  inputLabel: {
-    fontSize: 16,
-    color: theme.palette.text,
-  },
-  forgotPassword: {
-    textAlign: 'right',
-    fontWeight: '600',
-    color: theme.palette.text,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: scale(5),
-  },
-  footerText: {
-    textAlign: 'center',
-    color: theme.palette.text,
-    fontSize: 16,
-  },
-});

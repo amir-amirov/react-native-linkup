@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, TouchableHighlight, View, Text} from 'react-native';
+import {Alert, TouchableHighlight, View, Text} from 'react-native';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -13,19 +13,37 @@ import {useRef, useState} from 'react';
 import {openGallery} from '../../utils/openGallery';
 import {uploadImageToFirebase} from '../../utils/uploadImageToFirebase';
 import {Asset} from 'react-native-image-picker';
+import {Controller, useForm} from 'react-hook-form';
+import {ProfileFormData, profileSchema} from './scheme';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {deleteFileFromFirebaseStorage} from '../../utils/deleteImageFromFirebase';
+import {styles} from './styles';
 
 const EditProfile = () => {
   const {user, isLoading, setUser, updateProfile} = useUser();
   const navigation = useNavigation();
 
   const [isLoadingToStorage, setLoadingToStorage] = useState(false);
-
-  const nameRef = useRef('');
-  const phoneRef = useRef('');
-  const locationRef = useRef('');
-  const bioRef = useRef('');
-
   const [pickedImage, setPickedImage] = useState<Asset | undefined>();
+
+  // This will store the link I upload to storage,
+  // if problem arises storing it in backend,
+  // i should delete this image using this url
+  const uploadedImageUrl = useRef<string>('');
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: user?.name ?? '',
+      phoneNumber: user?.phoneNumber ?? '',
+      location: user?.location ?? '',
+      bio: user?.bio ?? '',
+    },
+  });
 
   const pickAvatar = async () => {
     const image = await openGallery(true);
@@ -35,30 +53,40 @@ const EditProfile = () => {
     }
   };
 
-  const handleUpdate = async () => {
+  const onSubmit = async (data: ProfileFormData) => {
     try {
       setLoadingToStorage(true);
-      let imageUrl;
+
       if (pickedImage) {
-        imageUrl = await uploadImageToFirebase(pickedImage);
+        uploadedImageUrl.current = await uploadImageToFirebase(pickedImage);
       }
 
-      console.log('I am sending: ', {
-        id: user?.id,
-        name: nameRef.current,
-        phoneNumber: phoneRef.current,
-        location: locationRef.current,
-        bio: bioRef.current,
-        image: imageUrl,
-      });
-      const response = await updateProfile({
-        id: user?.id,
-        name: nameRef.current,
-        phoneNumber: phoneRef.current,
-        location: locationRef.current,
-        bio: bioRef.current,
-        image: imageUrl,
-      });
+      if (
+        data.name === user?.name &&
+        data.phoneNumber === user.phoneNumber &&
+        data.location === user.location &&
+        data.bio === user.bio &&
+        !pickedImage
+      ) {
+        Alert.alert('Sorry', "You didn't change anything..");
+        return;
+      }
+
+      let updateProfileData;
+
+      if (uploadedImageUrl.current) {
+        updateProfileData = {
+          id: user?.id,
+          ...data,
+          image: uploadedImageUrl.current,
+        };
+      } else {
+        updateProfileData = {
+          id: user?.id,
+          ...data,
+        };
+      }
+      const response = await updateProfile(updateProfileData);
 
       if (!!response) {
         setUser(response);
@@ -71,8 +99,12 @@ const EditProfile = () => {
         err.length > 0 && typeof err !== 'string' ? err[0] : err,
       );
       console.log('Update profile error: ', err);
+      if (uploadedImageUrl.current) {
+        deleteFileFromFirebaseStorage(uploadedImageUrl.current);
+      }
     } finally {
       setLoadingToStorage(false);
+      uploadedImageUrl.current = '';
     }
   };
 
@@ -109,72 +141,116 @@ const EditProfile = () => {
               Please fill your profile details
             </Text>
 
-            <Input
-              onChangeText={(value: string) => {
-                nameRef.current = value;
-              }}
-              defaultValue={user && user.name ? user.name : ''}
-              icon={
-                <Icon name="user" size={scale(26)} strokeWidth={scale(1.6)} />
-              }
-              placeholder={'Enter your name..'}
-              autoCorrect={false}
-              dataDetectorTypes="none"
-              autoCapitalize="words"
-              editable={!isLoading || !isLoadingToStorage}
-            />
-            <Input
-              onChangeText={(value: string) => {
-                phoneRef.current = value;
-              }}
-              defaultValue={user && user.phoneNumber ? user.phoneNumber : ''}
-              icon={
-                <Icon name="call" size={scale(26)} strokeWidth={scale(1.6)} />
-              }
-              placeholder={'Enter your phone..'}
-              autoCorrect={false}
-              dataDetectorTypes="none"
-              editable={!isLoading || !isLoadingToStorage}
-            />
-            <Input
-              onChangeText={(value: string) => {
-                locationRef.current = value;
-              }}
-              defaultValue={user && user.location ? user.location : ''}
-              icon={
-                <Icon
-                  name="location"
-                  size={scale(26)}
-                  strokeWidth={scale(1.6)}
-                />
-              }
-              placeholder={'Enter your location..'}
-              autoCorrect={false}
-              dataDetectorTypes="none"
-              editable={!isLoading || !isLoadingToStorage}
-            />
-            <Input
-              onChangeText={(value: string) => {
-                bioRef.current = value;
-              }}
-              defaultValue={user && user.bio ? user.bio : ''}
-              placeholder={'Tell about yourself..'}
-              autoCorrect={false}
-              dataDetectorTypes="none"
-              editable={!isLoading || !isLoadingToStorage}
-              multiline={true}
-              numberOfLines={4}
-              textAlignVertical="top"
-              containerStyles={{
-                padding: scale(10),
-                alignItems: 'flex-start',
-                height: scale(100),
-              }}
-            />
+            <View style={styles.inputView}>
+              <Controller
+                control={control}
+                name="name"
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    value={value}
+                    onChangeText={onChange}
+                    icon={
+                      <Icon
+                        name="user"
+                        size={scale(26)}
+                        strokeWidth={scale(1.6)}
+                      />
+                    }
+                    placeholder={'Enter your name..'}
+                    autoCorrect={false}
+                    dataDetectorTypes="none"
+                    autoCapitalize="words"
+                    editable={!isLoading || !isLoadingToStorage}
+                  />
+                )}
+              />
+              {errors.name && (
+                <Text style={styles.error}>{errors.name.message}</Text>
+              )}
+            </View>
+            <View style={styles.inputView}>
+              <Controller
+                control={control}
+                name="phoneNumber"
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    value={value}
+                    onChangeText={onChange}
+                    icon={
+                      <Icon
+                        name="call"
+                        size={scale(26)}
+                        strokeWidth={scale(1.6)}
+                      />
+                    }
+                    placeholder={'Enter your phone..'}
+                    autoCorrect={false}
+                    dataDetectorTypes="none"
+                    editable={!isLoading || !isLoadingToStorage}
+                  />
+                )}
+              />
+              {errors.phoneNumber && (
+                <Text style={styles.error}>{errors.phoneNumber.message}</Text>
+              )}
+            </View>
+            <View style={styles.inputView}>
+              <Controller
+                control={control}
+                name="location"
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    value={value}
+                    onChangeText={onChange}
+                    icon={
+                      <Icon
+                        name="location"
+                        size={scale(26)}
+                        strokeWidth={scale(1.6)}
+                      />
+                    }
+                    placeholder={'Enter your location..'}
+                    autoCorrect={false}
+                    dataDetectorTypes="none"
+                    editable={!isLoading || !isLoadingToStorage}
+                  />
+                )}
+              />
+              {errors.location && (
+                <Text style={styles.error}>{errors.location.message}</Text>
+              )}
+            </View>
+            <View style={styles.inputView}>
+              <Controller
+                control={control}
+                name="bio"
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder={'Tell about yourself..'}
+                    autoCorrect={false}
+                    dataDetectorTypes="none"
+                    editable={!isLoading || !isLoadingToStorage}
+                    multiline={true}
+                    numberOfLines={4}
+                    textAlignVertical="top"
+                    containerStyles={{
+                      padding: scale(10),
+                      alignItems: 'flex-start',
+                      height: scale(100),
+                    }}
+                  />
+                )}
+              />
+              {errors.bio && (
+                <Text style={styles.error}>{errors.bio.message}</Text>
+              )}
+            </View>
             <Button
               title="Update"
               loading={isLoading || isLoadingToStorage}
-              onPress={() => handleUpdate()}
+              onPress={handleSubmit(onSubmit)}
             />
           </View>
         </View>
@@ -184,27 +260,3 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  avatarContainer: {
-    height: scale(110),
-    width: scale(110),
-    alignSelf: 'center',
-  },
-  editIcon: {
-    position: 'absolute',
-    bottom: 0,
-    right: -12,
-    padding: scale(7),
-    borderRadius: scale(50),
-    backgroundColor: theme.palette.white,
-    shadowColor: theme.palette.textLight,
-    shadowOffset: {width: 0, height: scale(4)},
-    shadowOpacity: 0.4,
-    shadowRadius: scale(5),
-    elevation: 7,
-  },
-});

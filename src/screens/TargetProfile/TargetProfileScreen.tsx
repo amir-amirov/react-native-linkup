@@ -1,7 +1,6 @@
 import {
   Alert,
   StyleSheet,
-  TouchableHighlight,
   View,
   Text,
   StatusBar,
@@ -13,35 +12,52 @@ import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import {scale} from '../../utils';
 import theme from '../../theme';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
-import {useNavigation} from '@react-navigation/native';
-import {useUser} from '../../store/user';
-import baseService, {handleLogout} from '../../services/axios/baseService';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import baseService from '../../services/axios/baseService';
 import Avatar from '../../components/Avatar/Avatar';
 import Icon from '../../components/Icon/Icon';
-import {useInfiniteQuery} from '@tanstack/react-query';
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import Loading from '../../components/Loading/Loading';
 import PostCard from '../../components/PostCard/PostCard';
 
-const ProfileScreen = () => {
-  const {user} = useUser();
+const TargetProfileScreen = () => {
+  const route = useRoute<any>();
+
+  const {userId} = route.params;
   const navigation = useNavigation<any>();
+
+  const {
+    data: user,
+    isLoading: isFetchingUser,
+    isError,
+    error: userError,
+  } = useQuery({
+    queryKey: ['users', userId],
+    queryFn: () => baseService.get(`/users/${userId}`),
+  });
 
   const fetchPosts = async ({pageParam = 1}) => {
     const response = await baseService.get(
-      `/posts/${user?.id}?page=${pageParam}&limit=10`,
+      `/posts/${userId}?page=${pageParam}&limit=10`,
     );
     return response.data;
   };
 
-  const {data, status, error, isFetchingNextPage, fetchNextPage, isFetching} =
-    useInfiniteQuery({
-      queryKey: ['posts', user?.id],
-      queryFn: fetchPosts,
-      initialPageParam: 1, // Specify the initial page parameter
-      getNextPageParam: (lastPage, pages) => {
-        return lastPage.data.length === 10 ? pages.length + 1 : undefined; // If we got 10 posts, fetch next page
-      },
-    });
+  const {
+    data,
+    status,
+    error,
+    isFetchingNextPage,
+    fetchNextPage,
+    isFetching: isFetchingPosts,
+  } = useInfiniteQuery({
+    queryKey: ['posts', userId],
+    queryFn: fetchPosts,
+    initialPageParam: 1, // Specify the initial page parameter
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage.data.length === 10 ? pages.length + 1 : undefined; // If we got 10 posts, fetch next page
+    },
+  });
 
   console.log('Data: ', data);
   console.log('Pages: ', data?.pages[0]);
@@ -49,7 +65,7 @@ const ProfileScreen = () => {
 
   const posts = data?.pages.map(page => page.data).flat();
 
-  if (isFetching) {
+  if (isFetchingPosts || isFetchingUser) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Loading />
@@ -57,28 +73,13 @@ const ProfileScreen = () => {
     );
   }
 
-  if (status === 'error') {
+  if (status === 'error' || isError) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Error: {error.message}</Text>
+        <Text>Error: {error?.message}</Text>
       </View>
     );
   }
-
-  const logout = () => {
-    Alert.alert('Confirm', 'Are you sure you want to log out?', [
-      {
-        text: 'Logout',
-        onPress: handleLogout,
-        style: 'destructive',
-      },
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Logout Cancelled'),
-        style: 'cancel',
-      },
-    ]);
-  };
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
@@ -87,7 +88,7 @@ const ProfileScreen = () => {
         barStyle={'dark-content'}
       />
       <View style={{flex: 1, paddingHorizontal: scale(20)}}>
-        <ProfileHeader handleLogout={logout} />
+        <ProfileHeader handleLogout={() => {}} showLogout={false} />
         <ScrollView
           contentContainerStyle={{flexGrow: 1}}
           showsVerticalScrollIndicator={false}>
@@ -96,22 +97,20 @@ const ProfileScreen = () => {
               {/* Avatar container */}
               <View style={styles.avatarContainer}>
                 <Avatar
-                  uri={user ? user.image : null}
+                  uri={user ? user.data.user.image : null}
                   size={scale(110)}
                   rounded={theme.spacing.radius.xxl * 1.4}
                 />
-                <TouchableHighlight
-                  style={styles.editIcon}
-                  underlayColor={theme.palette.gray}
-                  onPress={() => navigation.navigate('EditProfile')}>
-                  <Icon name="edit" strokeWidth={2.5} size={scale(20)} />
-                </TouchableHighlight>
               </View>
 
               {/* User's details */}
               <View style={{alignItems: 'center', gap: scale(4)}}>
-                <Text style={styles.userName}>{user && user.name}</Text>
-                <Text style={styles.infoText}>{user && user.location}</Text>
+                <Text style={styles.userName}>
+                  {user && user.data.user.name}
+                </Text>
+                <Text style={styles.infoText}>
+                  {user && user.data.user.location}
+                </Text>
               </View>
 
               {/* Email, phone, bio */}
@@ -122,9 +121,11 @@ const ProfileScreen = () => {
                     size={scale(20)}
                     color={theme.palette.textLight}
                   />
-                  <Text style={styles.infoText}>{user && user.email}</Text>
+                  <Text style={styles.infoText}>
+                    {user && user.data.user.email}
+                  </Text>
                 </View>
-                {user && user.phoneNumber && (
+                {user && user.data.user.phoneNumber && (
                   <View style={styles.info}>
                     <Icon
                       name="call"
@@ -132,16 +133,18 @@ const ProfileScreen = () => {
                       color={theme.palette.textLight}
                     />
                     <Text style={styles.infoText}>
-                      {user && user.phoneNumber}
+                      {user && user.data.user.phoneNumber}
                     </Text>
                   </View>
                 )}
-                {user && user.bio && (
-                  <Text style={styles.infoText}>{user && user.bio}</Text>
+                {user && user.data.user.bio && (
+                  <Text style={styles.infoText}>
+                    {user && user.data.user.bio}
+                  </Text>
                 )}
               </View>
             </View>
-            {!isFetching && posts && posts.length > 0 ? (
+            {!isFetchingPosts && posts && posts.length > 0 ? (
               <FlatList
                 data={posts}
                 contentContainerStyle={styles.listStyle}
@@ -189,7 +192,7 @@ const ProfileScreen = () => {
   );
 };
 
-export default ProfileScreen;
+export default TargetProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
