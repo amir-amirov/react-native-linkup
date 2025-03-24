@@ -1,6 +1,8 @@
 import {
   Alert,
+  Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -19,6 +21,7 @@ import Input from '../../components/Input/Input';
 import Icon from '../../components/Icon/Icon';
 import useCreateCommentMutation from '../../services/ReactQuery/useCreateCommentMutation';
 import CommentItem from '../../components/CommentItem/CommentItem';
+import Header from '../../components/Header/Header';
 
 const PostDetails = () => {
   const route = useRoute<any>();
@@ -79,6 +82,13 @@ const PostDetails = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        backgroundColor={theme.palette.white}
+        barStyle={Platform.OS === 'ios' ? 'light-content' : 'dark-content'}
+      />
+      <View style={{paddingHorizontal: scale(15)}}>
+        <Header title="Post" showBackButton={true} mb={scale(20)} />
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}>

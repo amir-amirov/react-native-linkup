@@ -1,20 +1,42 @@
-import React, {Suspense} from 'react';
+import React, {Suspense, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import AppNavigator from './src/navigation';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './src/store';
 import ReactQueryProvider from './src/services/ReactQuery/ReactQueryProvider';
+import notifee, {EventType} from '@notifee/react-native';
+
+import {createNavigationContainerRef} from '@react-navigation/native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+
+export const navigationRef: any = createNavigationContainerRef();
+
+export function navigate(name: any) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name);
+  }
+}
 
 const App = () => {
+  useEffect(() => {
+    return notifee.onForegroundEvent(({type, detail}) => {
+      if (type === EventType.PRESS) {
+        console.log('Notification is pressed..');
+        navigate('Notifications');
+      }
+    });
+  }, []);
   return (
     <Suspense fallback={null}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ReactQueryProvider>
-            <NavigationContainer>
-              <AppNavigator />
-            </NavigationContainer>
+            <GestureHandlerRootView style={{flex: 1}}>
+              <NavigationContainer ref={navigationRef}>
+                <AppNavigator />
+              </NavigationContainer>
+            </GestureHandlerRootView>
           </ReactQueryProvider>
         </PersistGate>
       </Provider>

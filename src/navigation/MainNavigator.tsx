@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import React from 'react';
+import {Platform, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/Home/HomeScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
@@ -44,7 +44,11 @@ const MainNavigator = () => {
       <Stack.Screen
         name="PostDetails"
         component={PostDetails}
-        options={{presentation: 'modal'}}
+        options={{
+          presentation: Platform.OS === 'ios' ? 'modal' : undefined,
+          animation:
+            Platform.OS === 'android' ? 'slide_from_bottom' : undefined,
+        }}
       />
     </Stack.Navigator>
   );

@@ -1,5 +1,12 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useRef} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import Icon from '../../components/Icon/Icon';
 import {scale} from '../../utils';
@@ -111,6 +118,11 @@ const HomeScreen = () => {
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
+      <StatusBar
+        backgroundColor={theme.palette.white}
+        barStyle={'dark-content'}
+      />
+
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -199,7 +211,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: scale(20),
-    marginBottom: scale(10),
+    marginVertical: scale(10),
   },
   title: {
     fontSize: 27,

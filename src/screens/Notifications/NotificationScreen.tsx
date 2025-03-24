@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import {useQuery} from '@tanstack/react-query';
@@ -39,6 +39,10 @@ const NotificationScreen = () => {
 
   return (
     <ScreenWrapper bgView={theme.palette.background}>
+      <StatusBar
+        backgroundColor={theme.palette.black}
+        barStyle={'dark-content'}
+      />
       <View style={styles.container}>
         <Header title="Notifications" showBackButton={true} />
         <ScrollView
