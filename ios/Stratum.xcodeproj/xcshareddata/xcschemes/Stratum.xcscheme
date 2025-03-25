@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "LinkUp.app"
-               BlueprintName = "LinkUp"
-               ReferencedContainer = "container:LinkUp.xcodeproj">
+               BuildableName = "Stratum.app"
+               BlueprintName = "Stratum"
+               ReferencedContainer = "container:Stratum.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "LinkUpTests.xctest"
-               BlueprintName = "LinkUpTests"
-               ReferencedContainer = "container:LinkUp.xcodeproj">
+               BuildableName = "StratumTests.xctest"
+               BlueprintName = "StratumTests"
+               ReferencedContainer = "container:Stratum.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "LinkUp.app"
-            BlueprintName = "LinkUp"
-            ReferencedContainer = "container:LinkUp.xcodeproj">
+            BuildableName = "Stratum.app"
+            BlueprintName = "Stratum"
+            ReferencedContainer = "container:Stratum.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "LinkUp.app"
-            BlueprintName = "LinkUp"
-            ReferencedContainer = "container:LinkUp.xcodeproj">
+            BuildableName = "Stratum.app"
+            BlueprintName = "Stratum"
+            ReferencedContainer = "container:Stratum.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

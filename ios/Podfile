@@ -14,7 +14,7 @@
 #   use_frameworks! :linkage => linkage.to_sym
 # end
 
-# target 'LinkUp' do
+# target 'Stratum' do
 #   config = use_native_modules!
 
 #   use_frameworks! :linkage => :static
@@ -83,7 +83,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'LinkUp' do
+target 'Stratum' do
   config = use_native_modules!
 
   use_frameworks! :linkage => :static
