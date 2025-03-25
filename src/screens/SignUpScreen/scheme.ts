@@ -1,23 +1,24 @@
 import {z} from 'zod';
+import i18next from '../../locales/i18n';
 
 export const signUpSchema = z
   .object({
-    name: z.string().nonempty('Name is required'),
+    name: z.string().nonempty(i18next.t('validation.name_required')),
     email: z
       .string()
-      .email('Please enter a valid email')
-      .nonempty('Email is required'),
+      .email(i18next.t('validation.email_invalid'))
+      .nonempty(i18next.t('validation.email_required')),
     password: z
       .string()
-      .min(6, 'Password must be at least 6 characters')
-      .nonempty('Password is required'),
+      .min(6, i18next.t('validation.password_min'))
+      .nonempty(i18next.t('validation.password_required')),
     confirmPassword: z
       .string()
-      .min(6, 'Password must be at least 6 characters')
-      .nonempty('Password is required'),
+      .min(6, i18next.t('validation.password_min'))
+      .nonempty(i18next.t('validation.password_required')),
   })
   .refine(data => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
+    message: i18next.t('validation.password_unmatch'),
     path: ['confirmPassword'],
   });
 

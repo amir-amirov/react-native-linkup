@@ -3,8 +3,10 @@ import React from 'react';
 import {scale} from '../../utils';
 import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import theme from '../../theme';
+import {useTranslation} from 'react-i18next';
 
 const RichTextEditor = ({editorRef, onChange}: any) => {
+  const {t} = useTranslation();
   return (
     <View style={{minHeight: scale(285)}}>
       <RichToolbar
@@ -44,7 +46,7 @@ const RichTextEditor = ({editorRef, onChange}: any) => {
           ...styles.contentStyle,
           caretColor: theme.palette.primary,
         }}
-        placeholder="What's on your mind?"
+        placeholder={t('text_editor_placeholder')}
         onChange={onChange}
         initialFocus={true}
       />

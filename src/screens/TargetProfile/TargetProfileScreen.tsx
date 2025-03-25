@@ -7,7 +7,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import React from 'react';
+import React, { use } from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import {scale} from '../../utils';
 import theme from '../../theme';
@@ -19,8 +19,11 @@ import Icon from '../../components/Icon/Icon';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import Loading from '../../components/Loading/Loading';
 import PostCard from '../../components/PostCard/PostCard';
+import {useTranslation} from 'react-i18next';
 
 const TargetProfileScreen = () => {
+
+    const {t} = useTranslation();
   const route = useRoute<any>();
 
   const {userId} = route.params;
@@ -182,7 +185,7 @@ const TargetProfileScreen = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text style={styles.noPosts}>No posts yet</Text>
+                <Text style={styles.noPosts}>{t("no_posts")}</Text>
               </View>
             )}
           </View>

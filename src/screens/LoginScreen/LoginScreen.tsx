@@ -21,8 +21,10 @@ import {Controller, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {LoginFormData, LoginSchema} from './scheme';
 import {styles} from './styles';
+import {useTranslation} from 'react-i18next';
 
 const LoginScreen = () => {
+  const {t} = useTranslation();
   const {isLoading, setIsAuth, loginUser, setUser} = useUser();
 
   const navigation = useNavigation<any>();
@@ -78,13 +80,13 @@ const LoginScreen = () => {
 
         {/* Welcome */}
         <View>
-          <Text style={styles.welcomeText}>Hey,</Text>
-          <Text style={styles.welcomeText}>Welcome Back</Text>
+          <Text style={styles.welcomeText}>{t('hey')},</Text>
+          <Text style={styles.welcomeText}>{t('welcome_back')}</Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
-          <Text style={styles.inputLabel}>Please login to continue</Text>
+          <Text style={styles.inputLabel}>{t('login_to_continue')}</Text>
           <View style={styles.inputView}>
             <Controller
               control={control}
@@ -99,7 +101,7 @@ const LoginScreen = () => {
                     />
                   }
                   value={value}
-                  placeholder={'Enter your email'}
+                  placeholder={t('email')}
                   onChangeText={onChange}
                   autoCorrect={false}
                   dataDetectorTypes="none"
@@ -130,7 +132,7 @@ const LoginScreen = () => {
                   ref={passwordInputRef}
                   value={value}
                   onChangeText={onChange}
-                  placeholder={'Enter your password'}
+                  placeholder={t('password')}
                   returnKeyType="done"
                   onSubmitEditing={handleSubmit(onSubmit)}
                   editable={!isLoading}
@@ -142,19 +144,19 @@ const LoginScreen = () => {
               <Text style={styles.error}>{errors.password.message}</Text>
             )}
           </View>
-          <TouchableOpacity disabled={isLoading} activeOpacity={0.5}>
+          {/* <TouchableOpacity disabled={isLoading} activeOpacity={0.5}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <Button
-            title="Login"
+            title={t('login')}
             loading={isLoading}
             onPress={handleSubmit(onSubmit)}
           />
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have an account?</Text>
+          <Text style={styles.footerText}>{t('no_account')}</Text>
           <TouchableOpacity
             disabled={isLoading}
             activeOpacity={0.5}
@@ -164,7 +166,7 @@ const LoginScreen = () => {
                 styles.footerText,
                 {color: theme.palette.primary, fontWeight: '600'},
               ]}>
-              Sign up
+              {t('sign_up')}
             </Text>
           </TouchableOpacity>
         </View>

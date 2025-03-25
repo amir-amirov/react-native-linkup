@@ -22,8 +22,11 @@ import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {SignUpFormData, signUpSchema} from './scheme';
 import {styles} from './styles';
+import {useTranslation} from 'react-i18next';
 
 const SignUpScreen = () => {
+  const {t} = useTranslation();
+
   const {isLoading, setIsAuth, registerUser, setUser} = useUser();
 
   const navigation = useNavigation<any>();
@@ -61,10 +64,10 @@ const SignUpScreen = () => {
       }
     } catch (err: any) {
       Alert.alert(
-        'Sorry',
+        t('sorry'),
         err.length > 0 && typeof err !== 'string' ? err[0] : err,
       );
-      console.log('Signin error: ', err);
+      console.log(t('something_wrong'), err);
     }
   };
 
@@ -86,15 +89,13 @@ const SignUpScreen = () => {
 
           {/* Welcome */}
           <View>
-            <Text style={styles.welcomeText}>Let's</Text>
-            <Text style={styles.welcomeText}>Get Started</Text>
+            <Text style={styles.welcomeText}>{t('lets')}</Text>
+            <Text style={styles.welcomeText}>{t('get_started')}</Text>
           </View>
 
           {/* Form */}
           <View style={styles.form}>
-            <Text style={styles.inputLabel}>
-              Please fill the details to create a new account
-            </Text>
+            <Text style={styles.inputLabel}>{t('signin_details')}</Text>
             <View style={styles.inputView}>
               <Controller
                 control={control}
@@ -110,7 +111,7 @@ const SignUpScreen = () => {
                     }
                     value={value}
                     onChangeText={onChange}
-                    placeholder={'Enter your name'}
+                    placeholder={t('name')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     returnKeyType="next"
@@ -140,7 +141,7 @@ const SignUpScreen = () => {
                     ref={emailInputRef}
                     value={value}
                     onChangeText={onChange}
-                    placeholder={'Enter your email'}
+                    placeholder={t('email')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     returnKeyType="next"
@@ -170,7 +171,7 @@ const SignUpScreen = () => {
                     ref={passwordInputRef}
                     value={value}
                     onChangeText={onChange}
-                    placeholder={'Enter your password'}
+                    placeholder={t('password')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     returnKeyType="next"
@@ -203,7 +204,7 @@ const SignUpScreen = () => {
                     ref={confirmPasswordInputRef}
                     value={value}
                     onChangeText={onChange}
-                    placeholder={'Confirm your password'}
+                    placeholder={t('confirm_password')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     returnKeyType="done"
@@ -222,14 +223,14 @@ const SignUpScreen = () => {
             </View>
 
             <Button
-              title="Sign Up"
+              title={t('sign_up')}
               loading={isLoading}
               onPress={handleSubmit(onSubmit)}
             />
           </View>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Already have an account?</Text>
+            <Text style={styles.footerText}>{t('already_account')}</Text>
             <TouchableOpacity
               disabled={isLoading}
               activeOpacity={0.5}
@@ -239,7 +240,7 @@ const SignUpScreen = () => {
                   styles.footerText,
                   {color: theme.palette.primary, fontWeight: '600'},
                 ]}>
-                Login
+                {t('login')}
               </Text>
             </TouchableOpacity>
           </View>

@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {use, useRef} from 'react';
 import {useRoute} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import baseService from '../../services/axios/baseService';
@@ -22,8 +22,10 @@ import Icon from '../../components/Icon/Icon';
 import useCreateCommentMutation from '../../services/ReactQuery/useCreateCommentMutation';
 import CommentItem from '../../components/CommentItem/CommentItem';
 import Header from '../../components/Header/Header';
+import {useTranslation} from 'react-i18next';
 
 const PostDetails = () => {
+  const {t} = useTranslation();
   const route = useRoute<any>();
 
   const {post, commentId} = route.params;
@@ -100,7 +102,7 @@ const PostDetails = () => {
           <Input
             inputRef={inputRef}
             onChangeText={(text: string) => (commentRef.current = text)}
-            placeholder="Type comment.."
+            placeholder={t('comment_input_placeholder')}
             placeholderTextColor={theme.palette.textLight}
             containerStyles={{
               flex: 1,
@@ -149,7 +151,7 @@ const PostDetails = () => {
                   color: theme.palette.textLight,
                   marginLeft: scale(5),
                 }}>
-                Be first to comment!
+                {t('no_comments')}
               </Text>
             </View>
           )}

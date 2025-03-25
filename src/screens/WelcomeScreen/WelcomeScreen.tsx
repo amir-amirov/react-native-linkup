@@ -6,9 +6,10 @@ import {scale} from '../../utils';
 import Button from '../../components/Buttons/Button/Button';
 import {styles} from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {useTranslation} from 'react-i18next';
 
 const WelcomeScreen = () => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
 
   return (
@@ -28,27 +29,25 @@ const WelcomeScreen = () => {
         {/* Title */}
         <View style={{gap: scale(20)}}>
           <Text style={styles.title}>LinkUp!</Text>
-          <Text style={styles.punchline}>
-            Where every thought finds a home and every image tells a story
-          </Text>
+          <Text style={styles.punchline}>{t('moto')}</Text>
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
           <Button
-            title="Getting Started"
+            title={t('getting_started')}
             buttonStyle={styles.btn}
             onPress={() => navigation.navigate('Signup')}
           />
 
           <View style={styles.bottomTextContainer}>
-            <Text style={styles.loginText}>Already have an account!</Text>
+            <Text style={styles.loginText}>{t('already_account')}</Text>
 
             <Pressable
               onPress={() => navigation.navigate('Login')}
               hitSlop={scale(10)}>
               <Text style={[styles.loginText, {color: theme.palette.primary}]}>
-                Login
+                {t('login')}
               </Text>
             </Pressable>
           </View>

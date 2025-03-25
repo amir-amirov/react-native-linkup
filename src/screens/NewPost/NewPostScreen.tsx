@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {use, useEffect, useRef, useState} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -27,8 +27,10 @@ import Video from 'react-native-video';
 import {uploadImageToFirebase} from '../../utils/uploadImageToFirebase';
 import useCreatePostMutation from '../../services/ReactQuery/useCreatePostMutation';
 import SimpleTextEditor from '../../components/SimpleTextEditor/SimpleTextEditor';
+import {useTranslation} from 'react-i18next';
 
 const NewPostScreen = () => {
+  const {t} = useTranslation();
   const {user} = useUser();
 
   const mutation = useCreatePostMutation();
@@ -52,7 +54,7 @@ const NewPostScreen = () => {
   const onSubmit = async () => {
     try {
       if (!postBody && !file) {
-        Alert.alert('Post', 'Please choose an image or add post body');
+        Alert.alert(t('post'), t('create_post_validation'));
         return;
       }
 
@@ -90,7 +92,7 @@ const NewPostScreen = () => {
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <View style={styles.container}>
-        <Header title="Create Post" showBackButton={true} mb={0} />
+        <Header title={t('create_post')} showBackButton={true} mb={0} />
         <ScrollView
           ref={scrollViewRef}
           contentContainerStyle={{gap: scale(20)}}
@@ -178,7 +180,7 @@ const NewPostScreen = () => {
           )}
 
           <View style={styles.media}>
-            <Text style={styles.addImageText}>Add to your post</Text>
+            <Text style={styles.addImageText}>{t('add_to_post')}</Text>
             <View style={styles.mediaIcons}>
               <TouchableOpacity
                 activeOpacity={0.5}
@@ -206,7 +208,7 @@ const NewPostScreen = () => {
 
         <Button
           buttonStyle={{height: scale(60)}}
-          title="Post"
+          title={t('post')}
           loading={isUploadingToStorage || mutation.isPending}
           onPress={() => onSubmit()}
         />

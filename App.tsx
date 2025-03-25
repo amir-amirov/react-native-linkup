@@ -10,6 +10,8 @@ import notifee, {EventType} from '@notifee/react-native';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
+import './src/locales/i18n';
+
 export const navigationRef: any = createNavigationContainerRef();
 
 export function navigate(name: any) {
