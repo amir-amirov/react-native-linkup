@@ -3,13 +3,12 @@ import {
   Platform,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {use, useRef} from 'react';
+import React, {useRef} from 'react';
 import {useRoute} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import baseService from '../../services/axios/baseService';
@@ -23,6 +22,7 @@ import useCreateCommentMutation from '../../services/ReactQuery/useCreateComment
 import CommentItem from '../../components/CommentItem/CommentItem';
 import Header from '../../components/Header/Header';
 import {useTranslation} from 'react-i18next';
+import {styles} from './styles';
 
 const PostDetails = () => {
   const {t} = useTranslation();
@@ -162,46 +162,3 @@ const PostDetails = () => {
 };
 
 export default PostDetails;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingVertical: scale(15),
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(10),
-  },
-  list: {
-    paddingHorizontal: scale(10),
-  },
-  sendIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 0.8,
-    borderColor: theme.palette.primary,
-    borderRadius: theme.spacing.radius.lg,
-    borderCurve: 'continuous',
-    height: scale(55),
-    width: scale(55),
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  notFound: {
-    fontSize: 16,
-    color: theme.palette.text,
-    fontWeight: '500',
-  },
-  loading: {
-    height: scale(55),
-    width: scale(55),
-    justifyContent: 'center',
-    alignItems: 'center',
-    transform: [{scale: 1.3}],
-  },
-});
