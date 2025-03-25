@@ -47,7 +47,9 @@ const PostCard: React.FC<Props> = ({item, onPress, showMoreIcon = true}) => {
 
   // Local state for optimistic update
   const [isLiked, setIsLiked] = useState(item?.likedByMe);
-  const [likesCount, setLikesCount] = useState(item.likesCount);
+  const [likesCount, setLikesCount] = useState(
+    item.likesCount ?? item.likes.length,
+  );
 
   // Prevent excessive requests
   const likeTimeout = useRef<NodeJS.Timeout | null>(null);
