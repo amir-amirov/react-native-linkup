@@ -1,5 +1,5 @@
 import {ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {use} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import {useQuery} from '@tanstack/react-query';
 import baseService from '../../services/axios/baseService';
@@ -9,8 +9,10 @@ import {scale} from '../../utils';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 const NotificationScreen = () => {
+  const {t} = useTranslation();
   const {user} = useUser();
   const navigation = useNavigation<any>();
 
@@ -44,7 +46,7 @@ const NotificationScreen = () => {
         barStyle={'dark-content'}
       />
       <View style={styles.container}>
-        <Header title="Notifications" showBackButton={true} />
+        <Header title={t('notifications')} showBackButton={true} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listStyle}>
@@ -59,7 +61,7 @@ const NotificationScreen = () => {
           })}
 
           {notifications?.data.length === 0 && (
-            <Text style={styles.noData}>No notifications yet</Text>
+            <Text style={styles.noData}>{t('no_notifications')}</Text>
           )}
         </ScrollView>
       </View>

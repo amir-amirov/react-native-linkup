@@ -1,9 +1,10 @@
 import {Platform, StyleSheet, TouchableHighlight, View} from 'react-native';
-import React from 'react';
+import React, {use} from 'react';
 import Header from '../Header/Header';
 import Icon from '../Icon/Icon';
 import theme from '../../theme';
 import {scale} from '../../utils';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   handleLogout: () => void;
@@ -11,9 +12,10 @@ interface Props {
 }
 
 const ProfileHeader: React.FC<Props> = ({handleLogout, showLogout = true}) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
-      <Header title="Profile" showBackButton={true} />
+      <Header title={t('profile')} showBackButton={true} />
       {showLogout && (
         <TouchableHighlight
           underlayColor={'#fedede'}

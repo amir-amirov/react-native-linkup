@@ -21,8 +21,10 @@ import Icon from '../../components/Icon/Icon';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import Loading from '../../components/Loading/Loading';
 import PostCard from '../../components/PostCard/PostCard';
+import {useTranslation} from 'react-i18next';
 
 const ProfileScreen = () => {
+  const {t} = useTranslation();
   const {user} = useUser();
   const navigation = useNavigation<any>();
 
@@ -66,14 +68,14 @@ const ProfileScreen = () => {
   }
 
   const logout = () => {
-    Alert.alert('Confirm', 'Are you sure you want to log out?', [
+    Alert.alert(t('confirm'), t('logout_question'), [
       {
-        text: 'Logout',
+        text: t('logout'),
         onPress: handleLogout,
         style: 'destructive',
       },
       {
-        text: 'Cancel',
+        text: t('cancel'),
         onPress: () => console.log('Logout Cancelled'),
         style: 'cancel',
       },
@@ -179,7 +181,7 @@ const ProfileScreen = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text style={styles.noPosts}>No posts yet</Text>
+                <Text style={styles.noPosts}>{t('no_posts')}</Text>
               </View>
             )}
           </View>

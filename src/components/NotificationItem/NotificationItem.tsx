@@ -1,9 +1,10 @@
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import React from 'react';
+import React, {use} from 'react';
 import {scale} from '../../utils';
 import theme from '../../theme';
 import Avatar from '../Avatar/Avatar';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   item: any;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const NotificationItem: React.FC<Props> = ({item, onPress}) => {
+  const {t} = useTranslation();
   return (
     <TouchableHighlight
       underlayColor={theme.palette.gray}
@@ -19,11 +21,15 @@ const NotificationItem: React.FC<Props> = ({item, onPress}) => {
       <View style={styles.innerContainer}>
         <Avatar uri={item.sender.image} size={scale(40)} />
         <View style={styles.nameTitle}>
-          <Text style={styles.text} numberOfLines={1}>
+          <Text numberOfLines={1} style={styles.text}>
             {item?.sender?.name}
           </Text>
-          <Text style={[styles.text, {color: theme.palette.textDark}]}>
-            {item?.type == 'comment' ? 'commented on' : 'liked'} your post
+          <Text
+            numberOfLines={1}
+            style={[styles.text, {color: theme.palette.textDark}]}>
+            {item?.type == 'comment'
+              ? t('comment_notification')
+              : t('like_notification')}
           </Text>
         </View>
 

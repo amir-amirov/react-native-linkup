@@ -18,8 +18,10 @@ import {ProfileFormData, profileSchema} from './scheme';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {deleteFileFromFirebaseStorage} from '../../utils/deleteImageFromFirebase';
 import {styles} from './styles';
+import {useTranslation} from 'react-i18next';
 
 const EditProfile = () => {
+  const {t} = useTranslation();
   const {user, isLoading, setUser, updateProfile} = useUser();
   const navigation = useNavigation();
 
@@ -68,7 +70,7 @@ const EditProfile = () => {
         data.bio === user.bio &&
         !pickedImage
       ) {
-        Alert.alert('Sorry', "You didn't change anything..");
+        Alert.alert(t('sorry'), t('no_changes'));
         return;
       }
 
@@ -95,7 +97,7 @@ const EditProfile = () => {
       navigation.goBack();
     } catch (err: any) {
       Alert.alert(
-        'Sorry',
+        t('sorry'),
         err.length > 0 && typeof err !== 'string' ? err[0] : err,
       );
       console.log('Update profile error: ', err);
@@ -111,7 +113,11 @@ const EditProfile = () => {
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <View style={{flex: 1, paddingHorizontal: scale(20)}}>
-        <Header title="Edit Profile" mb={scale(30)} showBackButton={true} />
+        <Header
+          title={t('edit_profile')}
+          mb={scale(30)}
+          showBackButton={true}
+        />
 
         <View style={styles.container}>
           <View style={{gap: scale(15)}}>
@@ -138,7 +144,7 @@ const EditProfile = () => {
                 fontWeight: '500',
                 color: theme.palette.textLight,
               }}>
-              Please fill your profile details
+              {t('profile_details')}
             </Text>
 
             <View style={styles.inputView}>
@@ -156,7 +162,7 @@ const EditProfile = () => {
                         strokeWidth={scale(1.6)}
                       />
                     }
-                    placeholder={'Enter your name..'}
+                    placeholder={t('name')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     autoCapitalize="words"
@@ -183,7 +189,7 @@ const EditProfile = () => {
                         strokeWidth={scale(1.6)}
                       />
                     }
-                    placeholder={'Enter your phone..'}
+                    placeholder={t('phone')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     editable={!isLoading || !isLoadingToStorage}
@@ -209,7 +215,7 @@ const EditProfile = () => {
                         strokeWidth={scale(1.6)}
                       />
                     }
-                    placeholder={'Enter your location..'}
+                    placeholder={t('location')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     editable={!isLoading || !isLoadingToStorage}
@@ -228,7 +234,7 @@ const EditProfile = () => {
                   <Input
                     value={value}
                     onChangeText={onChange}
-                    placeholder={'Tell about yourself..'}
+                    placeholder={t('bio')}
                     autoCorrect={false}
                     dataDetectorTypes="none"
                     editable={!isLoading || !isLoadingToStorage}
@@ -248,7 +254,7 @@ const EditProfile = () => {
               )}
             </View>
             <Button
-              title="Update"
+              title={t('update')}
               loading={isLoading || isLoadingToStorage}
               onPress={handleSubmit(onSubmit)}
             />

@@ -1,14 +1,15 @@
 import {z} from 'zod';
+import i18next from '../../locales/i18n';
 
 export const LoginSchema = z.object({
   email: z
     .string()
-    .email('Please enter a valid email')
-    .nonempty('Email is required'),
+    .email(i18next.t('validation.email_invalid'))
+    .nonempty(i18next.t('validation.email_required')),
   password: z
     .string()
-    .min(6, 'Password must be at least 6 characters')
-    .nonempty('Password is required'),
+    .min(6, i18next.t('validation.password_min'))
+    .nonempty(i18next.t('validation.password_required')),
 });
 
 // TypeScript: Infer the type from the schema
