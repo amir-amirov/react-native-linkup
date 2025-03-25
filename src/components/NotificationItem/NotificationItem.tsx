@@ -1,10 +1,11 @@
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import React, {use} from 'react';
+import {Text, TouchableHighlight, View} from 'react-native';
+import React from 'react';
 import {scale} from '../../utils';
 import theme from '../../theme';
 import Avatar from '../Avatar/Avatar';
 import moment from 'moment';
 import {useTranslation} from 'react-i18next';
+import {styles} from './styles';
 
 interface Props {
   item: any;
@@ -42,35 +43,3 @@ const NotificationItem: React.FC<Props> = ({item, onPress}) => {
 };
 
 export default NotificationItem;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-    // gap: scale(12),
-    backgroundColor: theme.palette.white,
-    borderWidth: 0.5,
-    borderColor: theme.palette.darkLight,
-    padding: scale(15),
-    borderRadius: theme.spacing.radius.xxl,
-    borderCurve: 'continuous',
-  },
-  innerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: scale(12),
-  },
-  nameTitle: {
-    flex: 1,
-    gap: 2,
-  },
-  text: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: theme.palette.text,
-  },
-});

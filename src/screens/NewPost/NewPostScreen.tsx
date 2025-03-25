@@ -3,13 +3,11 @@ import {
   Image,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {use, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -28,6 +26,7 @@ import {uploadImageToFirebase} from '../../utils/uploadImageToFirebase';
 import useCreatePostMutation from '../../services/ReactQuery/useCreatePostMutation';
 import SimpleTextEditor from '../../components/SimpleTextEditor/SimpleTextEditor';
 import {useTranslation} from 'react-i18next';
+import {styles} from './styles';
 
 const NewPostScreen = () => {
   const {t} = useTranslation();
@@ -117,29 +116,6 @@ const NewPostScreen = () => {
                 editable={!isUploadingToStorage && !mutation.isPending}
               />
             ) : (
-              // <TextInput
-              //   multiline
-              //   placeholder="What's on your mind?"
-              //   placeholderTextColor={theme.palette.textLight}
-              //   onChangeText={setPostBody}
-              //   value={postBody}
-              //   editable={!isUploadingToStorage && !mutation.isPending}
-              //   autoFocus
-              //   selectionColor={theme.palette.primary}
-              //   style={{
-              //     minHeight: scale(240),
-              //     flex: 1,
-              //     borderWidth: 1.5,
-              //     // borderTopWidth: 0,
-              //     borderRadius: theme.spacing.radius.xl,
-              //     // borderBottomLeftRadius: theme.spacing.radius.xl,
-              //     borderColor: theme.palette.gray,
-              //     paddingHorizontal: scale(15),
-              //     paddingVertical: scale(10),
-              //     color: theme.palette.textDark,
-              //     textAlignVertical: 'top',
-              //   }}
-              // />
               <SimpleTextEditor
                 value={postBody}
                 setValue={setPostBody}
@@ -218,82 +194,3 @@ const NewPostScreen = () => {
 };
 
 export default NewPostScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: scale(15),
-    paddingVertical: scale(10),
-    gap: scale(20),
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: theme.palette.text,
-    textAlign: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(12),
-  },
-  username: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: theme.palette.text,
-  },
-  avatar: {
-    height: scale(70),
-    width: scale(70),
-    borderRadius: theme.spacing.radius.xl,
-    borderCurve: 'continuous',
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.1)',
-  },
-  publicText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: theme.palette.textLight,
-  },
-  textEditor: {},
-  media: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: 1.5,
-    padding: scale(12),
-    paddingHorizontal: scale(18),
-    borderRadius: theme.spacing.radius.xl,
-    borderCurve: 'continuous',
-    borderColor: theme.palette.gray,
-  },
-  mediaIcons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(15),
-  },
-  addImageText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: theme.palette.text,
-  },
-  imageIcon: {
-    borderRadius: theme.spacing.radius.md,
-  },
-  file: {
-    height: scale(250),
-    width: '100%',
-    borderRadius: theme.spacing.radius.xl,
-    overflow: 'hidden',
-    borderCurve: 'continuous',
-  },
-  video: {},
-  closeIcon: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    padding: scale(7),
-    borderRadius: scale(50),
-    backgroundColor: 'rgba(255,0,0,0.6)',
-  },
-});

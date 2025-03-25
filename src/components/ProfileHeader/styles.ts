@@ -4,23 +4,19 @@ import theme from '../../theme';
 
 export const styles = StyleSheet.create({
   container: {
-    position: 'relative',
-    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: scale(5),
-    gap: scale(10),
+    // marginBottom: scale(30),
+    padding: 0,
   },
-  title: {
-    marginTop: scale(5),
-    fontSize: 24,
-    fontWeight: '600',
-    color: theme.palette.textDark,
-  },
-  showBackButton: {
+  logoutButton: {
     position: 'absolute',
-    left: 0,
     // top: 0,
+    right: 0,
     bottom: Platform.OS === 'ios' ? undefined : 0,
+    padding: scale(5),
+    marginTop: scale(5),
+    marginBottom: scale(10),
+    borderRadius: theme.spacing.radius.sm,
+    backgroundColor: '#fee2e2',
   },
 });

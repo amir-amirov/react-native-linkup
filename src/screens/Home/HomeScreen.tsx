@@ -1,12 +1,5 @@
-import {
-  FlatList,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useRef} from 'react';
+import {FlatList, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import Icon from '../../components/Icon/Icon';
 import {scale} from '../../utils';
@@ -18,6 +11,7 @@ import PostCard from '../../components/PostCard/PostCard';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import baseService from '../../services/axios/baseService';
 import Loading from '../../components/Loading/Loading';
+import {styles} from './styles';
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -38,10 +32,6 @@ const HomeScreen = () => {
         return lastPage.data.length === 10 ? pages.length + 1 : undefined; // If we got 10 posts, fetch next page
       },
     });
-
-  console.log('Data: ', data);
-  console.log('Pages: ', data?.pages[0]);
-  console.log('My posts: ', data?.pages[0].data);
 
   const posts = data?.pages.map(page => page.data).flat();
 
@@ -97,12 +87,6 @@ const HomeScreen = () => {
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={() => navigation.navigate('Profile')}>
-              {/* <Icon
-                name="user"
-                size={scale(27)}
-                strokeWidth={scale(2)}
-                color={theme.palette.text}
-              /> */}
               <Avatar
                 uri={user ? user?.image : ''}
                 size={scale(35)}
@@ -146,31 +130,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: scale(20),
-    marginVertical: scale(10),
-  },
-  title: {
-    fontSize: 27,
-    fontWeight: '700',
-    color: theme.palette.text,
-  },
-  icons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: scale(18),
-  },
-  listStyle: {
-    paddingHorizontal: scale(15),
-    paddingTop: scale(15),
-  },
-});

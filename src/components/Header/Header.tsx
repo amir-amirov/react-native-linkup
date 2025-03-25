@@ -1,10 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import React from 'react';
 import {scale} from '../../utils';
 import BackButton from '../Buttons/BackButton/BackButton';
 import {useNavigation} from '@react-navigation/native';
-import theme from '../../theme';
 import {Platform} from 'react-native';
+import {styles} from './styles';
 
 interface Props {
   title: string;
@@ -33,28 +33,3 @@ const Header: React.FC<Props> = ({
 };
 
 export default Header;
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: scale(5),
-    gap: scale(10),
-    // borderColor: 'black',
-    // borderWidth: 0.5,
-  },
-  title: {
-    marginTop: scale(5),
-    fontSize: 24,
-    fontWeight: '600',
-    color: theme.palette.textDark,
-  },
-  showBackButton: {
-    position: 'absolute',
-    left: 0,
-    // top: 0,
-    bottom: Platform.OS === 'ios' ? undefined : 0,
-  },
-});

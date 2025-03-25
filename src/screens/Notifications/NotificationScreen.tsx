@@ -1,15 +1,15 @@
-import {ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
-import React, {use} from 'react';
+import {ScrollView, StatusBar, Text, View} from 'react-native';
+import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import {useQuery} from '@tanstack/react-query';
 import baseService from '../../services/axios/baseService';
 import {useUser} from '../../store/user';
 import NotificationItem from '../../components/NotificationItem/NotificationItem';
-import {scale} from '../../utils';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
+import {styles} from './styles';
 
 const NotificationScreen = () => {
   const {t} = useTranslation();
@@ -70,20 +70,3 @@ const NotificationScreen = () => {
 };
 
 export default NotificationScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: scale(15),
-  },
-  listStyle: {
-    paddingVertical: scale(20),
-    gap: scale(10),
-  },
-  noData: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: theme.palette.text,
-    textAlign: 'center',
-  },
-});
