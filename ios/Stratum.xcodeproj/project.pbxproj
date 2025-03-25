@@ -7,25 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		12FC122FC0D306496CC07BD6 /* Pods_LinkUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C2928FCDE948BC2954E4030 /* Pods_LinkUp.framework */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2995CCA52D89A8590067CEF5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2995CCA42D89A8590067CEF5 /* GoogleService-Info.plist */; };
 		386E8F6A6B361BA1CD04954D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		4BFD5CE2AF1CDC86D2F1C863 /* Pods_Stratum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4076697BB23411467E966B5C /* Pods_Stratum.framework */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		13B07F961A680F5B00A75B9A /* Stratum.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stratum.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "Stratum/Images.xcassets"; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Stratum/Info.plist"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Stratum.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stratum.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Stratum/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Stratum/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Stratum/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2995CCA42D89A8590067CEF5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-Stratum.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stratum.debug.xcconfig"; path = "Target Support Files/Pods-Stratum/Pods-Stratum.debug.xcconfig"; sourceTree = "<group>"; };
+		4076697BB23411467E966B5C /* Pods_Stratum.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stratum.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5709B34CF0A7D63546082F79 /* Pods-Stratum.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stratum.release.xcconfig"; path = "Target Support Files/Pods-Stratum/Pods-Stratum.release.xcconfig"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Stratum/AppDelegate.swift; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = "Stratum/LaunchScreen.storyboard"; sourceTree = "<group>"; };
-		9C2928FCDE948BC2954E4030 /* Pods_LinkUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Stratum/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -34,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12FC122FC0D306496CC07BD6 /* Pods_LinkUp.framework in Frameworks */,
+				4BFD5CE2AF1CDC86D2F1C863 /* Pods_Stratum.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,14 +51,14 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 			);
-			name = "Stratum";
+			name = Stratum;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				9C2928FCDE948BC2954E4030 /* Pods_LinkUp.framework */,
+				4076697BB23411467E966B5C /* Pods_Stratum.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -121,8 +121,8 @@
 			);
 			dependencies = (
 			);
-			name = "Stratum";
-			productName = "Stratum";
+			name = Stratum;
+			productName = Stratum;
 			productReference = 13B07F961A680F5B00A75B9A /* Stratum.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -280,8 +280,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D969475664;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = "Stratum/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Stratum";
+				INFOPLIST_FILE = Stratum/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stratum;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -294,7 +294,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaiyq.linkup;
-				PRODUCT_NAME = "Stratum";
+				PRODUCT_NAME = Stratum;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -309,8 +309,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D969475664;
-				INFOPLIST_FILE = "Stratum/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Stratum";
+				INFOPLIST_FILE = Stratum/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stratum;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -323,7 +323,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaiyq.linkup;
-				PRODUCT_NAME = "Stratum";
+				PRODUCT_NAME = Stratum;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

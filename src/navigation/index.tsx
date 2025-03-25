@@ -4,7 +4,6 @@ import AuthNavigator from './AuthNavigator';
 import {useUser} from '../store/user';
 import baseService from '../services/axios/baseService';
 import messaging from '@react-native-firebase/messaging';
-import {Alert} from 'react-native';
 import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
 
 const AppNavigator = () => {
@@ -84,8 +83,8 @@ const AppNavigator = () => {
         title,
         body,
         android: {
-          channelId: 'default', // Must match the channel ID created above
-          // smallIcon: 'ic_stat_name', // Ensure this icon exists in your project
+          channelId: 'default',
+          smallIcon: 'ic_notification',
           pressAction: {
             id: 'default',
           },
