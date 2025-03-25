@@ -61,7 +61,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>LinkUp</Text>
+          <Text style={styles.title}>Stratum</Text>
 
           <View style={styles.icons}>
             <TouchableOpacity

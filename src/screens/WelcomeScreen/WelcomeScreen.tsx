@@ -28,7 +28,7 @@ const WelcomeScreen = () => {
 
         {/* Title */}
         <View style={{gap: scale(20)}}>
-          <Text style={styles.title}>LinkUp!</Text>
+          <Text style={styles.title}>Stratum!</Text>
           <Text style={styles.punchline}>{t('moto')}</Text>
         </View>
 
