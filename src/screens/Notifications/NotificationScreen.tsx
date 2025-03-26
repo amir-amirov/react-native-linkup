@@ -42,7 +42,7 @@ const NotificationScreen = () => {
   return (
     <ScreenWrapper bgView={theme.palette.background}>
       <StatusBar
-        backgroundColor={theme.palette.black}
+        backgroundColor={theme.palette.background}
         barStyle={'dark-content'}
       />
       <View style={styles.container}>

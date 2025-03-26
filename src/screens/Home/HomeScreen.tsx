@@ -1,4 +1,11 @@
-import {FlatList, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import Icon from '../../components/Icon/Icon';
@@ -23,19 +30,27 @@ const HomeScreen = () => {
     return response.data;
   };
 
-  const {data, status, error, isFetchingNextPage, fetchNextPage, isFetching} =
-    useInfiniteQuery({
-      queryKey: ['posts'],
-      queryFn: fetchPosts,
-      initialPageParam: 1, // Specify the initial page parameter
-      getNextPageParam: (lastPage, pages) => {
-        return lastPage.data.length === 10 ? pages.length + 1 : undefined; // If we got 10 posts, fetch next page
-      },
-    });
+  const {
+    data,
+    status,
+    error,
+    isFetchingNextPage,
+    fetchNextPage,
+    isFetching,
+    refetch,
+    isRefetching,
+  } = useInfiniteQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+    initialPageParam: 1, // Specify the initial page parameter
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage.data.length === 10 ? pages.length + 1 : undefined; // If we got 10 posts, fetch next page
+    },
+  });
 
   const posts = data?.pages.map(page => page.data).flat();
 
-  if (isFetching) {
+  if (isFetching && !isRefetching) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Loading />
@@ -50,6 +65,11 @@ const HomeScreen = () => {
       </View>
     );
   }
+
+  // Handle pull-to-refresh
+  const onRefresh = () => {
+    refetch(); // Trigger refetch to reload data
+  };
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
@@ -122,6 +142,14 @@ const HomeScreen = () => {
                 <Loading />
               </View>
             ) : null
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={onRefresh}
+              tintColor={theme.palette.primary} // Color of the refresh spinner (iOS)
+              colors={[theme.palette.primary]} // Color of the refresh spinner (Android)
+            />
           }
         />
       </View>

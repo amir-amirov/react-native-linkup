@@ -1,10 +1,12 @@
 import {
   Alert,
   Image,
+  Keyboard,
   Platform,
   ScrollView,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
@@ -89,107 +91,110 @@ const NewPostScreen = () => {
   }, [file]);
 
   return (
-    <ScreenWrapper bgView={theme.palette.white}>
-      <View style={styles.container}>
-        <Header title={t('create_post')} showBackButton={true} mb={0} />
-        <ScrollView
-          ref={scrollViewRef}
-          contentContainerStyle={{gap: scale(20)}}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Avatar
-              uri={user ? user.image : null}
-              size={scale(60)}
-              rounded={theme.spacing.radius.xl}
-            />
-            <View style={{gap: scale(2)}}>
-              <Text style={styles.username}>{user && user.name}</Text>
-              <Text style={styles.publicText}>Public</Text>
-            </View>
-          </View>
-
-          <View style={styles.textEditor}>
-            {Platform.OS == 'ios' ? (
-              <RichTextEditor
-                editorRef={editorRef}
-                onChange={(body: any) => setPostBody(body)}
-                editable={!isUploadingToStorage && !mutation.isPending}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScreenWrapper bgView={theme.palette.white}>
+        <View style={styles.container}>
+          <Header title={t('create_post')} showBackButton={true} mb={0} />
+          <ScrollView
+            ref={scrollViewRef}
+            contentContainerStyle={{gap: scale(20)}}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled">
+            <View style={styles.header}>
+              <Avatar
+                uri={user ? user.image : null}
+                size={scale(60)}
+                rounded={theme.spacing.radius.xl}
               />
-            ) : (
+              <View style={{gap: scale(2)}}>
+                <Text style={styles.username}>{user && user.name}</Text>
+                <Text style={styles.publicText}>Public</Text>
+              </View>
+            </View>
+
+            <View style={styles.textEditor}>
+              {/* {Platform.OS == 'ios' ? (
+                <RichTextEditor
+                  editorRef={editorRef}
+                  onChange={(body: any) => setPostBody(body)}
+                  editable={!isUploadingToStorage && !mutation.isPending}
+                />
+              ) : ( */}
               <SimpleTextEditor
                 value={postBody}
                 setValue={setPostBody}
                 editable={!isUploadingToStorage && !mutation.isPending}
               />
+              {/* )} */}
+            </View>
+
+            {file && (
+              <View style={styles.file}>
+                {getFileType(file) === 'video' ? (
+                  <Video
+                    source={{uri: file.uri}}
+                    resizeMode="cover"
+                    style={{flex: 1}}
+                    controls={true}
+                  />
+                ) : (
+                  <Image
+                    source={{uri: file.uri}}
+                    resizeMode="cover"
+                    style={{flex: 1}}
+                  />
+                )}
+
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={styles.closeIcon}
+                  onPress={() => setFile(null)}
+                  disabled={isUploadingToStorage || mutation.isPending}>
+                  <Icon
+                    name="delete"
+                    size={scale(20)}
+                    color={theme.palette.white}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
-          </View>
 
-          {file && (
-            <View style={styles.file}>
-              {getFileType(file) === 'video' ? (
-                <Video
-                  source={{uri: file.uri}}
-                  resizeMode="cover"
-                  style={{flex: 1}}
-                  controls={true}
-                />
-              ) : (
-                <Image
-                  source={{uri: file.uri}}
-                  resizeMode="cover"
-                  style={{flex: 1}}
-                />
-              )}
-
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.closeIcon}
-                onPress={() => setFile(null)}
-                disabled={isUploadingToStorage || mutation.isPending}>
-                <Icon
-                  name="delete"
-                  size={scale(20)}
-                  color={theme.palette.white}
-                />
-              </TouchableOpacity>
+            <View style={styles.media}>
+              <Text style={styles.addImageText}>{t('add_to_post')}</Text>
+              <View style={styles.mediaIcons}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => onPick(true)}
+                  disabled={isUploadingToStorage || mutation.isPending}>
+                  <Icon
+                    name="image"
+                    size={scale(30)}
+                    color={theme.palette.dark}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => onPick(false)}
+                  disabled={isUploadingToStorage || mutation.isPending}>
+                  <Icon
+                    name="video"
+                    size={scale(33)}
+                    color={theme.palette.dark}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          )}
+          </ScrollView>
 
-          <View style={styles.media}>
-            <Text style={styles.addImageText}>{t('add_to_post')}</Text>
-            <View style={styles.mediaIcons}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={() => onPick(true)}
-                disabled={isUploadingToStorage || mutation.isPending}>
-                <Icon
-                  name="image"
-                  size={scale(30)}
-                  color={theme.palette.dark}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={() => onPick(false)}
-                disabled={isUploadingToStorage || mutation.isPending}>
-                <Icon
-                  name="video"
-                  size={scale(33)}
-                  color={theme.palette.dark}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ScrollView>
-
-        <Button
-          buttonStyle={{height: scale(60)}}
-          title={t('post')}
-          loading={isUploadingToStorage || mutation.isPending}
-          onPress={() => onSubmit()}
-        />
-      </View>
-    </ScreenWrapper>
+          <Button
+            buttonStyle={{height: scale(60)}}
+            title={t('post')}
+            loading={isUploadingToStorage || mutation.isPending}
+            onPress={() => onSubmit()}
+          />
+        </View>
+      </ScreenWrapper>
+    </TouchableWithoutFeedback>
   );
 };
 
