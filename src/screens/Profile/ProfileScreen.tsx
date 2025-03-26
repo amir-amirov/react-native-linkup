@@ -81,7 +81,7 @@ const ProfileScreen = () => {
   return (
     <ScreenWrapper bgView={theme.palette.white}>
       <StatusBar
-        backgroundColor={theme.palette.black}
+        backgroundColor={theme.palette.white}
         barStyle={'dark-content'}
       />
       <View style={{flex: 1, paddingHorizontal: scale(20)}}>

@@ -1,9 +1,13 @@
 import {
   Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   StatusBar,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useRef} from 'react';
@@ -67,110 +71,116 @@ const LoginScreen = () => {
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
-      <StatusBar
-        backgroundColor={theme.palette.white}
-        barStyle={'dark-content'}
-      />
-      <View
-        style={[
-          styles.container,
-          {paddingTop: insets.top > 0 ? scale(10) : scale(20)},
-        ]}>
-        <BackButton onPress={() => navigation.navigate('Welcome')} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <StatusBar
+            backgroundColor={theme.palette.white}
+            barStyle={'dark-content'}
+          />
+          <View
+            style={[
+              styles.container,
+              {paddingTop: insets.top > 0 ? scale(10) : scale(20)},
+            ]}>
+            <BackButton onPress={() => navigation.navigate('Welcome')} />
 
-        {/* Welcome */}
-        <View>
-          <Text style={styles.welcomeText}>{t('hey')},</Text>
-          <Text style={styles.welcomeText}>{t('welcome_back')}</Text>
-        </View>
+            {/* Welcome */}
+            <View>
+              <Text style={styles.welcomeText}>{t('hey')},</Text>
+              <Text style={styles.welcomeText}>{t('welcome_back')}</Text>
+            </View>
 
-        {/* Form */}
-        <View style={styles.form}>
-          <Text style={styles.inputLabel}>{t('login_to_continue')}</Text>
-          <View style={styles.inputView}>
-            <Controller
-              control={control}
-              name="email"
-              render={({field: {onChange, value}}) => (
-                <Input
-                  icon={
-                    <Icon
-                      name="mail"
-                      size={scale(26)}
-                      strokeWidth={scale(1.6)}
+            {/* Form */}
+            <View style={styles.form}>
+              <Text style={styles.inputLabel}>{t('login_to_continue')}</Text>
+              <View style={styles.inputView}>
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({field: {onChange, value}}) => (
+                    <Input
+                      icon={
+                        <Icon
+                          name="mail"
+                          size={scale(26)}
+                          strokeWidth={scale(1.6)}
+                        />
+                      }
+                      value={value}
+                      placeholder={t('email')}
+                      onChangeText={onChange}
+                      autoCorrect={false}
+                      dataDetectorTypes="none"
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      onSubmitEditing={() => passwordInputRef.current?.focus()}
+                      editable={!isLoading}
                     />
-                  }
-                  value={value}
-                  placeholder={t('email')}
-                  onChangeText={onChange}
-                  autoCorrect={false}
-                  dataDetectorTypes="none"
-                  returnKeyType="next"
-                  blurOnSubmit={false}
-                  onSubmitEditing={() => passwordInputRef.current?.focus()}
-                  editable={!isLoading}
+                  )}
                 />
-              )}
-            />
-            {errors.email && (
-              <Text style={styles.error}>{errors.email.message}</Text>
-            )}
-          </View>
-          <View style={styles.inputView}>
-            <Controller
-              control={control}
-              name="password"
-              render={({field: {onChange, value}}) => (
-                <Input
-                  icon={
-                    <Icon
-                      name="lock"
-                      size={scale(26)}
-                      strokeWidth={scale(1.6)}
+                {errors.email && (
+                  <Text style={styles.error}>{errors.email.message}</Text>
+                )}
+              </View>
+              <View style={styles.inputView}>
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({field: {onChange, value}}) => (
+                    <Input
+                      icon={
+                        <Icon
+                          name="lock"
+                          size={scale(26)}
+                          strokeWidth={scale(1.6)}
+                        />
+                      }
+                      ref={passwordInputRef}
+                      value={value}
+                      onChangeText={onChange}
+                      placeholder={t('password')}
+                      returnKeyType="done"
+                      onSubmitEditing={handleSubmit(onSubmit)}
+                      editable={!isLoading}
+                      secureTextEntry
                     />
-                  }
-                  ref={passwordInputRef}
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder={t('password')}
-                  returnKeyType="done"
-                  onSubmitEditing={handleSubmit(onSubmit)}
-                  editable={!isLoading}
-                  secureTextEntry
+                  )}
                 />
-              )}
-            />
-            {errors.password && (
-              <Text style={styles.error}>{errors.password.message}</Text>
-            )}
-          </View>
-          {/* <TouchableOpacity disabled={isLoading} activeOpacity={0.5}>
+                {errors.password && (
+                  <Text style={styles.error}>{errors.password.message}</Text>
+                )}
+              </View>
+              {/* <TouchableOpacity disabled={isLoading} activeOpacity={0.5}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity> */}
 
-          <Button
-            title={t('login')}
-            loading={isLoading}
-            onPress={handleSubmit(onSubmit)}
-          />
-        </View>
+              <Button
+                title={t('login')}
+                loading={isLoading}
+                onPress={handleSubmit(onSubmit)}
+              />
+            </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>{t('no_account')}</Text>
-          <TouchableOpacity
-            disabled={isLoading}
-            activeOpacity={0.5}
-            onPress={() => navigation.navigate('Signup')}>
-            <Text
-              style={[
-                styles.footerText,
-                {color: theme.palette.primary, fontWeight: '600'},
-              ]}>
-              {t('sign_up')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>{t('no_account')}</Text>
+              <TouchableOpacity
+                disabled={isLoading}
+                activeOpacity={0.5}
+                onPress={() => navigation.navigate('Signup')}>
+                <Text
+                  style={[
+                    styles.footerText,
+                    {color: theme.palette.primary, fontWeight: '600'},
+                  ]}>
+                  {t('sign_up')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </ScreenWrapper>
   );
 };

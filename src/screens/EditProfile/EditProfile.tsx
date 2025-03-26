@@ -1,4 +1,13 @@
-import {Alert, TouchableHighlight, View, Text} from 'react-native';
+import {
+  Alert,
+  TouchableHighlight,
+  View,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import theme from '../../theme';
 import Header from '../../components/Header/Header';
@@ -112,155 +121,167 @@ const EditProfile = () => {
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
-      <View style={{flex: 1, paddingHorizontal: scale(20)}}>
-        <Header
-          title={t('edit_profile')}
-          mb={scale(30)}
-          showBackButton={true}
-        />
-
-        <View style={styles.container}>
-          <View style={{gap: scale(15)}}>
-            {/* Avatar container */}
-            <View style={styles.avatarContainer}>
-              <Avatar
-                uri={
-                  pickedImage?.uri ? pickedImage.uri : user ? user.image : null
-                }
-                size={scale(110)}
-                rounded={theme.spacing.radius.xxl * 1.4}
-              />
-              <TouchableHighlight
-                style={styles.editIcon}
-                underlayColor={theme.palette.gray}
-                onPress={() => pickAvatar()}>
-                <Icon name="camera" strokeWidth={2.5} size={scale(20)} />
-              </TouchableHighlight>
-            </View>
-
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: '500',
-                color: theme.palette.textLight,
-              }}>
-              {t('profile_details')}
-            </Text>
-
-            <View style={styles.inputView}>
-              <Controller
-                control={control}
-                name="name"
-                render={({field: {onChange, value}}) => (
-                  <Input
-                    value={value}
-                    onChangeText={onChange}
-                    icon={
-                      <Icon
-                        name="user"
-                        size={scale(26)}
-                        strokeWidth={scale(1.6)}
-                      />
-                    }
-                    placeholder={t('name')}
-                    autoCorrect={false}
-                    dataDetectorTypes="none"
-                    autoCapitalize="words"
-                    editable={!isLoading || !isLoadingToStorage}
-                  />
-                )}
-              />
-              {errors.name && (
-                <Text style={styles.error}>{errors.name.message}</Text>
-              )}
-            </View>
-            <View style={styles.inputView}>
-              <Controller
-                control={control}
-                name="phoneNumber"
-                render={({field: {onChange, value}}) => (
-                  <Input
-                    value={value}
-                    onChangeText={onChange}
-                    icon={
-                      <Icon
-                        name="call"
-                        size={scale(26)}
-                        strokeWidth={scale(1.6)}
-                      />
-                    }
-                    placeholder={t('phone')}
-                    autoCorrect={false}
-                    dataDetectorTypes="none"
-                    editable={!isLoading || !isLoadingToStorage}
-                  />
-                )}
-              />
-              {errors.phoneNumber && (
-                <Text style={styles.error}>{errors.phoneNumber.message}</Text>
-              )}
-            </View>
-            <View style={styles.inputView}>
-              <Controller
-                control={control}
-                name="location"
-                render={({field: {onChange, value}}) => (
-                  <Input
-                    value={value}
-                    onChangeText={onChange}
-                    icon={
-                      <Icon
-                        name="location"
-                        size={scale(26)}
-                        strokeWidth={scale(1.6)}
-                      />
-                    }
-                    placeholder={t('location')}
-                    autoCorrect={false}
-                    dataDetectorTypes="none"
-                    editable={!isLoading || !isLoadingToStorage}
-                  />
-                )}
-              />
-              {errors.location && (
-                <Text style={styles.error}>{errors.location.message}</Text>
-              )}
-            </View>
-            <View style={styles.inputView}>
-              <Controller
-                control={control}
-                name="bio"
-                render={({field: {onChange, value}}) => (
-                  <Input
-                    value={value}
-                    onChangeText={onChange}
-                    placeholder={t('bio')}
-                    autoCorrect={false}
-                    dataDetectorTypes="none"
-                    editable={!isLoading || !isLoadingToStorage}
-                    multiline={true}
-                    numberOfLines={4}
-                    textAlignVertical="top"
-                    containerStyles={{
-                      padding: scale(10),
-                      alignItems: 'flex-start',
-                      height: scale(100),
-                    }}
-                  />
-                )}
-              />
-              {errors.bio && (
-                <Text style={styles.error}>{errors.bio.message}</Text>
-              )}
-            </View>
-            <Button
-              title={t('update')}
-              loading={isLoading || isLoadingToStorage}
-              onPress={handleSubmit(onSubmit)}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{flex: 1, paddingHorizontal: scale(20)}}>
+            <Header
+              title={t('edit_profile')}
+              mb={scale(30)}
+              showBackButton={true}
             />
+
+            <View style={styles.container}>
+              <View style={{gap: scale(15)}}>
+                {/* Avatar container */}
+                <View style={styles.avatarContainer}>
+                  <Avatar
+                    uri={
+                      pickedImage?.uri
+                        ? pickedImage.uri
+                        : user
+                        ? user.image
+                        : null
+                    }
+                    size={scale(110)}
+                    rounded={theme.spacing.radius.xxl * 1.4}
+                  />
+                  <TouchableHighlight
+                    style={styles.editIcon}
+                    underlayColor={theme.palette.gray}
+                    onPress={() => pickAvatar()}>
+                    <Icon name="camera" strokeWidth={2.5} size={scale(20)} />
+                  </TouchableHighlight>
+                </View>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: '500',
+                    color: theme.palette.textLight,
+                  }}>
+                  {t('profile_details')}
+                </Text>
+
+                <View style={styles.inputView}>
+                  <Controller
+                    control={control}
+                    name="name"
+                    render={({field: {onChange, value}}) => (
+                      <Input
+                        value={value}
+                        onChangeText={onChange}
+                        icon={
+                          <Icon
+                            name="user"
+                            size={scale(26)}
+                            strokeWidth={scale(1.6)}
+                          />
+                        }
+                        placeholder={t('name')}
+                        autoCorrect={false}
+                        dataDetectorTypes="none"
+                        autoCapitalize="words"
+                        editable={!isLoading || !isLoadingToStorage}
+                      />
+                    )}
+                  />
+                  {errors.name && (
+                    <Text style={styles.error}>{errors.name.message}</Text>
+                  )}
+                </View>
+                <View style={styles.inputView}>
+                  <Controller
+                    control={control}
+                    name="phoneNumber"
+                    render={({field: {onChange, value}}) => (
+                      <Input
+                        value={value}
+                        onChangeText={onChange}
+                        icon={
+                          <Icon
+                            name="call"
+                            size={scale(26)}
+                            strokeWidth={scale(1.6)}
+                          />
+                        }
+                        placeholder={t('phone')}
+                        autoCorrect={false}
+                        dataDetectorTypes="none"
+                        editable={!isLoading || !isLoadingToStorage}
+                      />
+                    )}
+                  />
+                  {errors.phoneNumber && (
+                    <Text style={styles.error}>
+                      {errors.phoneNumber.message}
+                    </Text>
+                  )}
+                </View>
+                <View style={styles.inputView}>
+                  <Controller
+                    control={control}
+                    name="location"
+                    render={({field: {onChange, value}}) => (
+                      <Input
+                        value={value}
+                        onChangeText={onChange}
+                        icon={
+                          <Icon
+                            name="location"
+                            size={scale(26)}
+                            strokeWidth={scale(1.6)}
+                          />
+                        }
+                        placeholder={t('location')}
+                        autoCorrect={false}
+                        dataDetectorTypes="none"
+                        editable={!isLoading || !isLoadingToStorage}
+                      />
+                    )}
+                  />
+                  {errors.location && (
+                    <Text style={styles.error}>{errors.location.message}</Text>
+                  )}
+                </View>
+                <View style={styles.inputView}>
+                  <Controller
+                    control={control}
+                    name="bio"
+                    render={({field: {onChange, value}}) => (
+                      <Input
+                        value={value}
+                        onChangeText={onChange}
+                        placeholder={t('bio')}
+                        autoCorrect={false}
+                        dataDetectorTypes="none"
+                        editable={!isLoading || !isLoadingToStorage}
+                        multiline={true}
+                        numberOfLines={4}
+                        textAlignVertical="top"
+                        containerStyles={{
+                          padding: scale(10),
+                          alignItems: 'flex-start',
+                          height: scale(100),
+                        }}
+                      />
+                    )}
+                  />
+                  {errors.bio && (
+                    <Text style={styles.error}>{errors.bio.message}</Text>
+                  )}
+                </View>
+                <Button
+                  title={t('update')}
+                  loading={isLoading || isLoadingToStorage}
+                  onPress={handleSubmit(onSubmit)}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </ScreenWrapper>
   );
 };

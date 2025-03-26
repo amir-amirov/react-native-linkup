@@ -48,7 +48,7 @@ const RichTextEditor = ({editorRef, onChange}: any) => {
         }}
         placeholder={t('text_editor_placeholder')}
         onChange={onChange}
-        initialFocus={true}
+        // initialFocus={true}
       />
     </View>
   );

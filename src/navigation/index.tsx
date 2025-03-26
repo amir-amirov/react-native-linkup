@@ -19,12 +19,15 @@ const AppNavigator = () => {
         authStatus === messaging.AuthorizationStatus.PROVISIONAL
       ) {
         console.log('Notification permission granted.');
-        const token = await messaging().getToken();
+      } else {
+        console.log('Notification permission denied.');
+      }
+
+      const token = await messaging().getToken();
+      if (token) {
         setDeviceToken(token);
         console.log('FCM Token: ', token);
         sendTokenToBackend(token);
-      } else {
-        console.log('Notification permission denied.');
       }
     } catch (err) {
       console.log('Permission request failed: ', err);
@@ -97,7 +100,9 @@ const AppNavigator = () => {
   };
 
   useEffect(() => {
-    if (isAuth) requestPermission();
+    if (isAuth) {
+      requestPermission();
+    }
 
     createNotificationChannel();
     // checkAndRequestPermissions();
