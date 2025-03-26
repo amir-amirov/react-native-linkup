@@ -1416,6 +1416,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-splash-screen (3.3.0):
+    - React-Core
   - react-native-video (6.11.0):
     - DoubleConversion
     - glog
@@ -2176,6 +2178,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2326,6 +2329,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -2472,6 +2477,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 4c10603e9b253c7f48f296034c04a09fe9c8d427
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 33fadf89988c8813cfac57797a3bc53708863dd1
+  react-native-splash-screen: 95994222cc95c236bd3cdc59fe45ed5f27969594
   react-native-video: 8e4be29440b3b6cbe66ea0d695fe6ab3052c29f2
   react-native-webview: bbc90f70233e58004d8df887437477a2659ab32d
   React-NativeModulesApple: ec44c21ae0bbb5f9a2df72db00294e33a00e07f0

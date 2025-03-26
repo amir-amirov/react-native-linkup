@@ -71,14 +71,14 @@ const LoginScreen = () => {
 
   return (
     <ScreenWrapper bgView={theme.palette.white}>
+      <StatusBar
+        backgroundColor={theme.palette.white}
+        barStyle={'dark-content'}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{flex: 1}}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <StatusBar
-            backgroundColor={theme.palette.white}
-            barStyle={'dark-content'}
-          />
           <View
             style={[
               styles.container,

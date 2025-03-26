@@ -87,10 +87,20 @@ const AppNavigator = () => {
         body,
         android: {
           channelId: 'default',
-          smallIcon: 'ic_notification',
+          smallIcon: 'ic_launcher',
+          largeIcon: 'ic_launcher_large',
+          color: '#00C26F',
           pressAction: {
             id: 'default',
           },
+          actions: [
+            {
+              title: 'Mark as Read',
+              pressAction: {
+                id: 'mark-as-read',
+              },
+            },
+          ],
         },
       });
       console.log('Notification displayed successfully');
