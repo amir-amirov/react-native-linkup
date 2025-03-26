@@ -12,6 +12,9 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import './src/locales/i18n';
 
+import SplashScreen from 'react-native-splash-screen';
+import {Platform} from 'react-native';
+
 export const navigationRef: any = createNavigationContainerRef();
 
 export function navigate(name: any) {
@@ -22,6 +25,10 @@ export function navigate(name: any) {
 
 const App = () => {
   useEffect(() => {
+    if (Platform.OS === 'android') {
+      SplashScreen.hide();
+    }
+
     return notifee.onForegroundEvent(({type, detail}) => {
       if (type === EventType.PRESS) {
         console.log('Notification is pressed..');

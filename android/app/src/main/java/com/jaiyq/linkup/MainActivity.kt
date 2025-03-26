@@ -1,5 +1,6 @@
 package com.jaiyq.linkup
-import android.os.Bundle;
+import android.os.Bundle; 
+import org.devio.rn.splashscreen.SplashScreen; 
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -15,6 +16,8 @@ class MainActivity : ReactActivity() {
   override fun getMainComponentName(): String = "Stratum"
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    SplashScreen.show(this)  // here
+    // super.onCreate(savedInstanceState)
     super.onCreate(null)
   }
 

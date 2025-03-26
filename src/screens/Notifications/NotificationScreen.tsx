@@ -1,5 +1,5 @@
 import {ScrollView, StatusBar, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import ScreenWrapper from '../../components/ScreenWrapper/ScreenWrapper';
 import {useQuery} from '@tanstack/react-query';
 import baseService from '../../services/axios/baseService';
@@ -10,6 +10,7 @@ import Header from '../../components/Header/Header';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {styles} from './styles';
+import notifee from '@notifee/react-native';
 
 const NotificationScreen = () => {
   const {t} = useTranslation();
@@ -38,6 +39,10 @@ const NotificationScreen = () => {
       commentId: item.commentId,
     });
   };
+
+  useEffect(() => {
+    notifee.setBadgeCount(0);
+  }, []);
 
   return (
     <ScreenWrapper bgView={theme.palette.background}>
