@@ -15,6 +15,8 @@ import './src/locales/i18n';
 import SplashScreen from 'react-native-splash-screen';
 import {Platform} from 'react-native';
 
+import { linking } from './src/navigation/Linking';
+
 export const navigationRef: any = createNavigationContainerRef();
 
 export function navigate(name: any) {
@@ -42,7 +44,7 @@ const App = () => {
         <PersistGate loading={null} persistor={persistor}>
           <ReactQueryProvider>
             <GestureHandlerRootView style={{flex: 1}}>
-              <NavigationContainer ref={navigationRef}>
+              <NavigationContainer ref={navigationRef} linking={linking} >
                 <AppNavigator />
               </NavigationContainer>
             </GestureHandlerRootView>
