@@ -29,8 +29,9 @@ const PostDetails = () => {
   const route = useRoute<any>();
 
   const {post, commentId} = route.params;
+  const {id:deepId} = route.params || {}
 
-  console.log('Comment id: ', commentId);
+  console.log(deepId);
 
   const inputRef = useRef<TextInput>(null);
   const commentRef = useRef('');
@@ -41,8 +42,8 @@ const PostDetails = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ['comments', post.id],
-    queryFn: () => baseService.get(`/comments/${post.id}`),
+    queryKey: ['comments', deepId],
+    queryFn: () => baseService.get(`/comments/${deepId}`),
   });
   const mutation = useCreateCommentMutation();
 
@@ -51,7 +52,7 @@ const PostDetails = () => {
       return null;
     }
     mutation.mutate(
-      {post_id: post.id, text: commentRef.current},
+      {post_id: deepId, text: commentRef.current},
       {
         onSuccess: () => {
           console.log('Comment created successfully!');
